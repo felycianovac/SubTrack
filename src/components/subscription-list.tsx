@@ -3,18 +3,38 @@ import { Card, CardContent } from "@/components/ui/card"
 import { formatCurrency, formatDate, getDaysUntil } from "@/lib/utils"
 import type { Subscription } from "@/types/subscription"
 import { ExternalLink } from "lucide-react"
+import { useState, useMemo } from "react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+
 
 interface SubscriptionListProps {
   subscriptions: Subscription[]
 }
 
 export default function SubscriptionList({ subscriptions }: SubscriptionListProps) {
+  const [categoryFilter, setCategoryFilter] = useState<string>("all")
+
+  const categories = useMemo(() => {
+    const uniqueCategories = new Set(subscriptions.map((sub) => sub.category))
+    return ["all", ...Array.from(uniqueCategories)]
+  }, [subscriptions])
+
   const formatBillingCycle = (billingCycle: Subscription["billingCycle"]): string => {
     if (billingCycle.interval === 1) {
       return billingCycle.unit.slice(0, -1) + "ly" 
     }
     return `every ${billingCycle.interval} ${billingCycle.unit}`
   }
+
+  const filteredAndSortedSubscriptions = useMemo(() => {
+    let filtered = subscriptions
+
+    if (categoryFilter !== "all") {
+      filtered = filtered.filter((sub) => sub.category === categoryFilter)
+    }
+    return filtered
+  }, [subscriptions, categoryFilter])
+
 
   const getStatusColor = (status: Subscription["status"], daysUntil: number) => {
     if (status === "cancelled") return "bg-gray-200 text-gray-700"
@@ -26,22 +46,38 @@ export default function SubscriptionList({ subscriptions }: SubscriptionListProp
 
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold">Your Subscriptions</h2>
+    <div className="flex flex-col sm:flex-row gap-4 justify-between">
+      <div className="flex items-center gap-2">
+        <span className="text-sm font-medium">Category:</span>
+        <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Select category" />
+          </SelectTrigger>
+          <SelectContent>
+            {categories.map((category) => (
+              <SelectItem key={category} value={category}>
+                {category === "all" ? "All Categories" : category}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      </div>
 
-      {subscriptions.length === 0 ? (
-        <div className="text-center py-10 text-muted-foreground">No subscriptions found.</div>
+      {filteredAndSortedSubscriptions.length === 0 ? (
+        <div className="text-center py-10 text-muted-foreground">No subscriptions found</div>
       ) : (
         <div className="grid gap-4">
-          {subscriptions.map((subscription) => {
+          {filteredAndSortedSubscriptions.map((subscription) => {
             const daysUntil = getDaysUntil(subscription.nextPaymentDate)
             const statusColor = getStatusColor(subscription.status, daysUntil)
 
             return (
               <Card
                 key={subscription.id}
-                className={`${
-                  subscription.status === "cancelled" || subscription.status === "disabled" ? "opacity-60" : ""
-                } ${subscription.status === "paused" ? "border-yellow-300" : ""}`}
+                className={`${subscription.status === "cancelled" || subscription.status === "disabled" ? "opacity-60" : ""} ${
+                  subscription.status === "paused" ? "border-yellow-300" : ""
+                }`}
               >
                 <CardContent className="p-4">
                   <div className="flex justify-between items-start">
@@ -79,6 +115,8 @@ export default function SubscriptionList({ subscriptions }: SubscriptionListProp
                       </div>
                       {subscription.notes && <p className="text-xs text-muted-foreground mt-2">{subscription.notes}</p>}
                     </div>
+
+      
                   </div>
                 </CardContent>
               </Card>
