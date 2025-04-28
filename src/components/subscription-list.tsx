@@ -13,6 +13,8 @@ interface SubscriptionListProps {
 
 export default function SubscriptionList({ subscriptions }: SubscriptionListProps) {
   const [categoryFilter, setCategoryFilter] = useState<string>("all")
+  const [sortBy, setSortBy] = useState<string>("name")
+
 
   const categories = useMemo(() => {
     const uniqueCategories = new Set(subscriptions.map((sub) => sub.category))
@@ -26,15 +28,59 @@ export default function SubscriptionList({ subscriptions }: SubscriptionListProp
     return `every ${billingCycle.interval} ${billingCycle.unit}`
   }
 
+  const getMonthlyPrice = (subscription: Subscription): number => {
+    const { price, billingCycle } = subscription
+
+    if (billingCycle.unit === "months" && billingCycle.interval === 1) {
+      return price
+    }
+
+    let monthlyPrice = price
+
+    switch (billingCycle.unit) {
+      case "days":
+        monthlyPrice = (price / billingCycle.interval) * 30
+        break
+      case "weeks":
+        monthlyPrice = (price / billingCycle.interval) * 4.33
+        break
+      case "months":
+        monthlyPrice = price / billingCycle.interval
+        break
+      case "years":
+        monthlyPrice = price / (billingCycle.interval * 12)
+        break
+    }
+
+    return monthlyPrice
+  }
+
   const filteredAndSortedSubscriptions = useMemo(() => {
     let filtered = subscriptions
 
     if (categoryFilter !== "all") {
       filtered = filtered.filter((sub) => sub.category === categoryFilter)
     }
-    return filtered
-  }, [subscriptions, categoryFilter])
-
+    return [...filtered].sort((a, b) => {
+      const aPrice = getMonthlyPrice(a)
+      const bPrice = getMonthlyPrice(b)
+      switch (sortBy) {
+        case "name":
+          return a.name.localeCompare(b.name)
+          case "priceHigh":
+            return bPrice - aPrice // High to Low
+          case "priceLow":
+            return aPrice - bPrice // Low to High
+  
+        case "expiringSoon":
+          return getDaysUntil(a.nextPaymentDate) - getDaysUntil(b.nextPaymentDate)
+        case "longestRemaining":
+          return getDaysUntil(b.nextPaymentDate) - getDaysUntil(a.nextPaymentDate)
+        default:
+          return 0
+      }
+    })
+  }, [subscriptions, categoryFilter, sortBy])
 
   const getStatusColor = (status: Subscription["status"], daysUntil: number) => {
     if (status === "cancelled") return "bg-gray-200 text-gray-700"
@@ -62,6 +108,22 @@ export default function SubscriptionList({ subscriptions }: SubscriptionListProp
           </SelectContent>
         </Select>
       </div>
+
+      <div className="flex items-center gap-2">
+          <span className="text-sm font-medium">Sort by:</span>
+          <Select value={sortBy} onValueChange={setSortBy}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="name">Name</SelectItem>
+              <SelectItem value="priceHigh">Price (High to Low)</SelectItem>
+              <SelectItem value="priceLow">Price (Low to High)</SelectItem>
+              <SelectItem value="expiringSoon">Expiring Soon</SelectItem>
+              <SelectItem value="longestRemaining">Longest Remaining</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       {filteredAndSortedSubscriptions.length === 0 ? (
