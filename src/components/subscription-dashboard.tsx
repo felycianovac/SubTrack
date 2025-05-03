@@ -34,22 +34,23 @@ export default function SubscriptionDashboard() {
   }
 
   return (
-    <div className="container mx-auto p-4 md:p-6">
-      <h1 className="text-3xl font-bold mb-6">Subscription Tracker</h1>
+<   div className="container mx-auto p-4 md:p-6">
+      <div className="flex justify-end mb-6">
+        <button
+          onClick={() => setIsAddingNew(true)}
+          className="rounded-md bg-black px-6 py-3 text-white hover:bg-black/80"
+        >
+          Add Subscription
+        </button>
+      </div>
 
-      <button
-        onClick={() => setIsAddingNew(true)}
-        className="mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-      >
-        Add Subscription
-      </button>
 
       <SubscriptionList subscriptions={subscriptions} />
 
       {isAddingNew && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-<div className="relative bg-white p-8 rounded-xl w-full max-w-xl mx-auto shadow-md">
-<div className="flex justify-between items-center mb-4">
+        <div className="relative bg-white p-8 rounded-xl w-full max-w-xl mx-auto shadow-md">
+        <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">Add New Subscription</h2>
               <button
                 className="text-gray-500 hover:text-gray-800"
