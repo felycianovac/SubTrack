@@ -46,27 +46,26 @@ export default function SubscriptionDashboard() {
 
       <SubscriptionList subscriptions={subscriptions} />
 
-
       {isAddingNew && (
-        <div className="relative bg-background p-8 rounded-xl w-full max-w-xl mx-auto shadow-md">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold">Add New Subscription</h2>
-            <button
-              className="text-gray-500 hover:text-gray-800"
-              onClick={() => setIsAddingNew(false)}
-              aria-label="Close"
-            >
-              <X className="w-5 h-5" />
-            </button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+<div className="relative bg-white p-8 rounded-xl w-full max-w-xl mx-auto shadow-md">
+<div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold">Add New Subscription</h2>
+              <button
+                className="text-gray-500 hover:text-gray-800"
+                onClick={() => setIsAddingNew(false)}
+                aria-label="Close"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <AddSubscriptionForm
+              onSubmit={addSubscription}
+              onCancel={() => setIsAddingNew(false)}
+            />
           </div>
-          <AddSubscriptionForm
-            onSubmit={addSubscription}
-            onCancel={() => setIsAddingNew(false)}
-          />
         </div>
       )}
     </div>
   )
 }
-
-
