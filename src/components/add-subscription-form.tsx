@@ -365,10 +365,7 @@ export default function AddSubscriptionForm({ onSubmit, onCancel, initialData }:
       </div>
 
       <div className="flex justify-end gap-2 pt-2">
-        <Button type="button" variant="outline" onClick={onCancel}>
-          Cancel
-        </Button>
-        <Button type="submit">{initialData ? "Update" : "Add"} Subscription</Button>
+        <Button type="submit" variant="outline"> {initialData ? "Update" : "Add"} Subscription</Button>
       </div>
     </form>
   )
