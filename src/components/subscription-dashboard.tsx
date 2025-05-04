@@ -7,6 +7,9 @@ import { generateSampleData } from "@/lib/sample-data"
 import { X } from "lucide-react"
 
 import type { Subscription } from "@/types/subscription"
+import { TabsContent, TabsList, TabsTrigger, Tabs } from "@/components/ui/tabs"
+import { Sub } from "node_modules/@radix-ui/react-dropdown-menu/dist"
+import SubscriptionStats from "./subscription-stats"
 
 export default function SubscriptionDashboard() {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
@@ -59,57 +62,80 @@ export default function SubscriptionDashboard() {
     localStorage.setItem("subscriptions", JSON.stringify(updated)) // ← missing
       }
 
-  return (
-    <div className="container mx-auto p-4 md:p-6">
-      <div className="flex justify-end mb-6">
-        <button
-          onClick={() => {
-            setIsAddingNew(true)
-            setEditingSubscription(null)
-          }}
-          className="rounded-md bg-black px-6 py-3 text-white hover:bg-black/80"
-        >
-          Add Subscription
-        </button>
-      </div>
-
-      <SubscriptionList 
-        subscriptions={subscriptions} 
-        onEdit={setEditingSubscription}
-        onDelete={deleteSubscription}
-        onStatusChange={handleStatusChange}
-
-      />
-
-      {(isAddingNew || editingSubscription) && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="relative bg-white p-8 rounded-xl w-full max-w-xl mx-auto shadow-md">
+      return (
+        <div className="container mx-auto p-4 md:p-6 space-y-6">
+          <Tabs defaultValue="list">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold mb-4">
-                {editingSubscription ? "Edit Subscription" : "Add New Subscription"}
-              </h2>
+            <TabsList className="inline-flex items-center bg-gray-100 p-1 rounded-lg border border-gray-200">
+            <TabsTrigger value="list"
+              className="px-4 py-2 text-sm font-medium rounded-md text-gray-500 data-[state=active]:bg-white data-[state=active]:text-black hover:text-black transition-colors"
+            >List</TabsTrigger>
+            <TabsTrigger value="stats"
+              className="px-4 py-2 text-sm font-medium rounded-md text-gray-500 data-[state=active]:bg-white data-[state=active]:text-black hover:text-black transition-colors"
+            >Statistics</TabsTrigger>
+            <TabsTrigger value="calendar"
+              className="px-4 py-2 text-sm font-medium rounded-md text-gray-500 data-[state=active]:bg-white data-[state=active]:text-black hover:text-black transition-colors"
+              >Calendar</TabsTrigger>
+            </TabsList>
               <button
-                className="text-gray-500 hover:text-gray-800"
                 onClick={() => {
-                  setIsAddingNew(false)
+                  setIsAddingNew(true)
                   setEditingSubscription(null)
                 }}
-                aria-label="Close"
-              >
-                <X className="w-5 h-5" />
+                className="px-5 py-2.5 text-sm font-medium rounded-md bg-black text-white hover:bg-black/80 transition-colors"
+                >
+                Add Subscription
               </button>
             </div>
-            <AddSubscriptionForm
-              onSubmit={editingSubscription ? updateSubscription : addSubscription}
-              onCancel={() => {
-                setIsAddingNew(false)
-                setEditingSubscription(null)
-              }}
-              initialData={editingSubscription}
-            />
-          </div>
+      
+            <TabsContent value="list">
+              {/* Your existing layout starts here */}
+              <SubscriptionList 
+                subscriptions={subscriptions} 
+                onEdit={setEditingSubscription}
+                onDelete={deleteSubscription}
+                onStatusChange={handleStatusChange}
+              />
+            </TabsContent>
+      
+            <TabsContent value="stats">
+              <SubscriptionStats subscriptions={subscriptions} />
+            </TabsContent>
+      
+            <TabsContent value="calendar">
+              <p className="text-center text-muted-foreground">Calendar view coming soon</p>
+            </TabsContent>
+          </Tabs>
+      
+          {(isAddingNew || editingSubscription) && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+              <div className="relative bg-white p-8 rounded-xl w-full max-w-xl mx-auto shadow-md">
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-xl font-bold mb-4">
+                    {editingSubscription ? "Edit Subscription" : "Add New Subscription"}
+                  </h2>
+                  <button
+                    className="text-gray-500 hover:text-gray-800"
+                    onClick={() => {
+                      setIsAddingNew(false)
+                      setEditingSubscription(null)
+                    }}
+                    aria-label="Close"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+                <AddSubscriptionForm
+                  onSubmit={editingSubscription ? updateSubscription : addSubscription}
+                  onCancel={() => {
+                    setIsAddingNew(false)
+                    setEditingSubscription(null)
+                  }}
+                  initialData={editingSubscription}
+                />
+              </div>
+            </div>
+          )}
         </div>
-      )}
-    </div>
-  )
-}
+      )
+    }
