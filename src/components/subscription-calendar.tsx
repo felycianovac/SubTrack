@@ -143,12 +143,13 @@ export default function SubscriptionCalendar({ subscriptions }: SubscriptionCale
                     <div className="mt-1 space-y-1">
                       {subscriptionsByDay[day]?.map((subscription) => (
                         <div
-                          key={subscription.id}
-                          className="text-xs p-1 rounded bg-primary/10 truncate"
-                          title={`${subscription.name} - ${formatCurrency(subscription.price, subscription.currency)}/${formatBillingCycle(subscription.billingCycle)}`}
-                        >
-                          {subscription.name}
-                        </div>
+                        key={subscription.id}
+                        className="text-xs px-2 py-1 rounded-full bg-black/10 text-black truncate"
+                        title={`${subscription.name} - ${formatCurrency(subscription.price, subscription.currency)}/${formatBillingCycle(subscription.billingCycle)}`}
+                      >
+                        {subscription.name}
+                      </div>
+                      
                       ))}
                     </div>
                   </>
