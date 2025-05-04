@@ -8,9 +8,10 @@ import { X } from "lucide-react"
 
 import type { Subscription } from "@/types/subscription"
 import { TabsContent, TabsList, TabsTrigger, Tabs } from "@/components/ui/tabs"
-import { Sub } from "node_modules/@radix-ui/react-dropdown-menu/dist"
 import SubscriptionStats from "./subscription-stats"
 import SubscriptionCalendar from "./subscription-calendar"
+import { ThemeToggle } from "@/components/theme-toggle"
+
 
 export default function SubscriptionDashboard() {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
@@ -78,6 +79,9 @@ export default function SubscriptionDashboard() {
               className="px-4 py-2 text-sm font-medium rounded-md text-gray-500 data-[state=active]:bg-white data-[state=active]:text-black hover:text-black transition-colors"
               >Calendar</TabsTrigger>
             </TabsList>
+            <div className="absolute top-4 right-4 z-50">
+             <ThemeToggle />
+            </div>
               <button
                 onClick={() => {
                   setIsAddingNew(true)

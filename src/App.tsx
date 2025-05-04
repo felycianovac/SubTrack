@@ -37,8 +37,12 @@
 // src/App.tsx
 import Home from "@/pages/Home";
 import '@/styles/globals.css'
-
+import { ThemeProvider } from "@/components/theme-provider"; // <- your wrapper
 
 export default function App() {
-  return <Home />;
+  return (
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <Home />
+    </ThemeProvider>
+  );
 }
