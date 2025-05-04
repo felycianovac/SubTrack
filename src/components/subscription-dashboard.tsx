@@ -11,6 +11,8 @@ import type { Subscription } from "@/types/subscription"
 export default function SubscriptionDashboard() {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
   const [isAddingNew, setIsAddingNew] = useState(false)
+  const [editingSubscription, setEditingSubscription] = useState<Subscription | null>(null)
+
 
   useEffect(() => {
     const saved = localStorage.getItem("subscriptions")
@@ -33,36 +35,77 @@ export default function SubscriptionDashboard() {
     setIsAddingNew(false)
   }
 
+  const updateSubscription = (updatedSubscription: Subscription | Omit<Subscription, "id">) => {
+    if (!("id" in updatedSubscription)) return 
+    const updated = subscriptions.map((sub) => 
+      sub.id === updatedSubscription.id ? updatedSubscription : sub
+    )
+    setSubscriptions(updated)
+    localStorage.setItem("subscriptions", JSON.stringify(updated))
+    setEditingSubscription(null)
+  }
+
+  const deleteSubscription = (id: string) => {
+    const updated = subscriptions.filter((sub) => sub.id !== id)
+    setSubscriptions(updated)
+    localStorage.setItem("subscriptions", JSON.stringify(updated)) // ← missing
+  }
+
+  const handleStatusChange = (id: string, status: Subscription["status"]) => {
+    const updated = subscriptions.map((sub) =>
+      sub.id === id ? { ...sub, status } : sub
+    )
+    setSubscriptions(updated)
+    localStorage.setItem("subscriptions", JSON.stringify(updated)) // ← missing
+      }
+
   return (
-<   div className="container mx-auto p-4 md:p-6">
+    <div className="container mx-auto p-4 md:p-6">
       <div className="flex justify-end mb-6">
         <button
-          onClick={() => setIsAddingNew(true)}
+          onClick={() => {
+            setIsAddingNew(true)
+            setEditingSubscription(null)
+          }}
           className="rounded-md bg-black px-6 py-3 text-white hover:bg-black/80"
         >
           Add Subscription
         </button>
       </div>
 
+      <SubscriptionList 
+        subscriptions={subscriptions} 
+        onEdit={setEditingSubscription}
+        onDelete={deleteSubscription}
+        onStatusChange={handleStatusChange}
 
-      <SubscriptionList subscriptions={subscriptions} />
+      />
 
-      {isAddingNew && (
+      {(isAddingNew || editingSubscription) && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-        <div className="relative bg-white p-8 rounded-xl w-full max-w-xl mx-auto shadow-md">
-        <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">Add New Subscription</h2>
+          <div className="relative bg-white p-8 rounded-xl w-full max-w-xl mx-auto shadow-md">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold mb-4">
+                {editingSubscription ? "Edit Subscription" : "Add New Subscription"}
+              </h2>
               <button
                 className="text-gray-500 hover:text-gray-800"
-                onClick={() => setIsAddingNew(false)}
+                onClick={() => {
+                  setIsAddingNew(false)
+                  setEditingSubscription(null)
+                }}
                 aria-label="Close"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
             <AddSubscriptionForm
-              onSubmit={addSubscription}
-              onCancel={() => setIsAddingNew(false)}
+              onSubmit={editingSubscription ? updateSubscription : addSubscription}
+              onCancel={() => {
+                setIsAddingNew(false)
+                setEditingSubscription(null)
+              }}
+              initialData={editingSubscription}
             />
           </div>
         </div>
