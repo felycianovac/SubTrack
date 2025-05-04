@@ -2,10 +2,10 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { formatCurrency, formatDate, getDaysUntil } from "@/lib/utils"
 import type { Subscription } from "@/types/subscription"
-import { Edit, ExternalLink, MoreVertical } from "lucide-react"
+import { Edit, ExternalLink, MoreVertical, Pause, Play, Trash2, X } from "lucide-react"
 import { useState, useMemo } from "react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 
 
@@ -189,6 +189,22 @@ export default function SubscriptionList({ subscriptions, onEdit }: Subscription
                         <DropdownMenuItem onClick={() => onEdit(subscription)}>
                           <Edit className="mr-2 h-4 w-4" />
                           Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Pause className="mr-2 h-4 w-4" />
+                          Pause
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Play className="mr-2 h-4 w-4" />
+                          Activate
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <X className="mr-2 h-4 w-4" />
+                          Cancel
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          Delete
                         </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
