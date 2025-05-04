@@ -45,6 +45,20 @@ export default function SubscriptionDashboard() {
     setEditingSubscription(null)
   }
 
+  const deleteSubscription = (id: string) => {
+    const updated = subscriptions.filter((sub) => sub.id !== id)
+    setSubscriptions(updated)
+    localStorage.setItem("subscriptions", JSON.stringify(updated)) // ← missing
+  }
+
+  const handleStatusChange = (id: string, status: Subscription["status"]) => {
+    const updated = subscriptions.map((sub) =>
+      sub.id === id ? { ...sub, status } : sub
+    )
+    setSubscriptions(updated)
+    localStorage.setItem("subscriptions", JSON.stringify(updated)) // ← missing
+      }
+
   return (
     <div className="container mx-auto p-4 md:p-6">
       <div className="flex justify-end mb-6">
@@ -62,6 +76,9 @@ export default function SubscriptionDashboard() {
       <SubscriptionList 
         subscriptions={subscriptions} 
         onEdit={setEditingSubscription}
+        onDelete={deleteSubscription}
+        onStatusChange={handleStatusChange}
+
       />
 
       {(isAddingNew || editingSubscription) && (

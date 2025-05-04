@@ -12,9 +12,11 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 interface SubscriptionListProps {
   subscriptions: Subscription[]
   onEdit: (subscription: Subscription) => void
+  onDelete: (id: string) => void
+  onStatusChange: (id: string, status: Subscription["status"]) => void
 }
 
-export default function SubscriptionList({ subscriptions, onEdit }: SubscriptionListProps) {
+export default function SubscriptionList({ subscriptions, onEdit, onDelete, onStatusChange }: SubscriptionListProps) {
   const [categoryFilter, setCategoryFilter] = useState<string>("all")
   const [sortBy, setSortBy] = useState<string>("name")
 
@@ -190,19 +192,29 @@ export default function SubscriptionList({ subscriptions, onEdit }: Subscription
                           <Edit className="mr-2 h-4 w-4" />
                           Edit
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
+                        {subscription.status === "active" && (
+                          <DropdownMenuItem onClick={() => onStatusChange(subscription.id, "paused")}>
                           <Pause className="mr-2 h-4 w-4" />
                           Pause
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
+                        )}
+                        
+                         {(subscription.status === "paused" || subscription.status === "cancelled") && (
+                          <DropdownMenuItem onClick={() => onStatusChange(subscription.id, "active")}>
                           <Play className="mr-2 h-4 w-4" />
                           Activate
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
+                        )}
+                        {subscription.status !== "cancelled" && (
+                          <DropdownMenuItem onClick={() => onStatusChange(subscription.id, "cancelled")}>
                           <X className="mr-2 h-4 w-4" />
                           Cancel
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
+                        )}
+                         <DropdownMenuItem
+                          onClick={() => onDelete(subscription.id)}
+                          className="text-red-600 focus:text-red-600"
+                        >
                           <Trash2 className="mr-2 h-4 w-4" />
                           Delete
                         </DropdownMenuItem>
