@@ -7,7 +7,7 @@ import { generateSampleData } from "@/lib/sample-data"
 import { X } from "lucide-react"
 
 import type { Subscription } from "@/types/subscription"
-import { TabsContent, TabsList, TabsTrigger, Tabs } from "./ui/tabs"
+import { TabsContent, TabsList, TabsTrigger, Tabs } from "@/components/ui/tabs"
 
 export default function SubscriptionDashboard() {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
@@ -64,18 +64,24 @@ export default function SubscriptionDashboard() {
         <div className="container mx-auto p-4 md:p-6 space-y-6">
           <Tabs defaultValue="list">
             <div className="flex justify-between items-center mb-4">
-              <TabsList>
-                <TabsTrigger value="list">List</TabsTrigger>
-                <TabsTrigger value="stats">Statistics</TabsTrigger>
-                <TabsTrigger value="calendar">Calendar</TabsTrigger>
-              </TabsList>
+            <TabsList className="inline-flex items-center bg-gray-100 p-1 rounded-lg border border-gray-200">
+            <TabsTrigger value="list"
+              className="px-4 py-2 text-sm font-medium rounded-md text-gray-500 data-[state=active]:bg-white data-[state=active]:text-black hover:text-black transition-colors"
+            >List</TabsTrigger>
+            <TabsTrigger value="stats"
+              className="px-4 py-2 text-sm font-medium rounded-md text-gray-500 data-[state=active]:bg-white data-[state=active]:text-black hover:text-black transition-colors"
+            >Statistics</TabsTrigger>
+            <TabsTrigger value="calendar"
+              className="px-4 py-2 text-sm font-medium rounded-md text-gray-500 data-[state=active]:bg-white data-[state=active]:text-black hover:text-black transition-colors"
+              >Calendar</TabsTrigger>
+            </TabsList>
               <button
                 onClick={() => {
                   setIsAddingNew(true)
                   setEditingSubscription(null)
                 }}
-                className="rounded-md bg-black px-6 py-3 text-white hover:bg-black/80"
-              >
+                className="px-5 py-2.5 text-sm font-medium rounded-md bg-black text-white hover:bg-black/80 transition-colors"
+                >
                 Add Subscription
               </button>
             </div>
