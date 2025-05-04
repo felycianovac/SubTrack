@@ -2,16 +2,19 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { formatCurrency, formatDate, getDaysUntil } from "@/lib/utils"
 import type { Subscription } from "@/types/subscription"
-import { ExternalLink } from "lucide-react"
+import { Edit, ExternalLink, MoreVertical } from "lucide-react"
 import { useState, useMemo } from "react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
+
 
 
 interface SubscriptionListProps {
   subscriptions: Subscription[]
+  onEdit: (subscription: Subscription) => void
 }
 
-export default function SubscriptionList({ subscriptions }: SubscriptionListProps) {
+export default function SubscriptionList({ subscriptions, onEdit }: SubscriptionListProps) {
   const [categoryFilter, setCategoryFilter] = useState<string>("all")
   const [sortBy, setSortBy] = useState<string>("name")
 
@@ -177,8 +180,18 @@ export default function SubscriptionList({ subscriptions }: SubscriptionListProp
                       </div>
                       {subscription.notes && <p className="text-xs text-muted-foreground mt-2">{subscription.notes}</p>}
                     </div>
-
-      
+                    <DropdownMenu>
+                      <DropdownMenuTrigger className="h-8 w-8 flex items-center justify-center rounded-md hover:bg-muted">
+                        <MoreVertical className="h-4 w-4" />
+                        <span className="sr-only">Open menu</span>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => onEdit(subscription)}>
+                          <Edit className="mr-2 h-4 w-4" />
+                          Edit
+                        </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                   </div>
                 </CardContent>
               </Card>
