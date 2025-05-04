@@ -137,7 +137,10 @@ export default function SubscriptionList({ subscriptions, onEdit, onDelete, onSt
         <div className="grid gap-4">
           {filteredAndSortedSubscriptions.map((subscription) => {
             const daysUntil = getDaysUntil(subscription.nextPaymentDate)
+            const isPaid = subscription.status === "active" && daysUntil < 0
             const statusColor = getStatusColor(subscription.status, daysUntil)
+            const badgeClass = isPaid ? "bg-blue-100 text-blue-800" : statusColor
+
 
             return (
               <Card
@@ -172,13 +175,16 @@ export default function SubscriptionList({ subscriptions, onEdit, onDelete, onSt
                       </p>
                       <div className="flex items-center gap-2 text-sm">
                         <Badge variant="secondary">Started: {formatDate(subscription.startDate)}</Badge>
-                        <Badge className={statusColor}>
-                          {subscription.status === "active"
-                            ? daysUntil <= 0
+                        <Badge className={badgeClass}>
+                          {isPaid
+                            ? "Paid"
+                            : subscription.status === "active"
+                            ? daysUntil === 0
                               ? "Renews today!"
                               : `Renews in ${daysUntil} days`
                             : subscription.status.charAt(0).toUpperCase() + subscription.status.slice(1)}
                         </Badge>
+
                       </div>
                       {subscription.notes && <p className="text-xs text-muted-foreground mt-2">{subscription.notes}</p>}
                     </div>
