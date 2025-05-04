@@ -8,6 +8,8 @@ import { X } from "lucide-react"
 
 import type { Subscription } from "@/types/subscription"
 import { TabsContent, TabsList, TabsTrigger, Tabs } from "@/components/ui/tabs"
+import { Sub } from "node_modules/@radix-ui/react-dropdown-menu/dist"
+import SubscriptionStats from "./subscription-stats"
 
 export default function SubscriptionDashboard() {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
@@ -97,7 +99,7 @@ export default function SubscriptionDashboard() {
             </TabsContent>
       
             <TabsContent value="stats">
-              <p className="text-center text-muted-foreground">Statistics coming soon</p>
+              <SubscriptionStats subscriptions={subscriptions} />
             </TabsContent>
       
             <TabsContent value="calendar">
