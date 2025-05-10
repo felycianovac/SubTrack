@@ -2,8 +2,9 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { useTheme } from "next-themes";
 import { useEffect, useState, ReactNode, MouseEventHandler } from "react";
-import { cn } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 import { SelectItem, SelectContent } from "@/components/ui/select";
+import type { Currency } from "@/types/subscription";
 
 function useMountedThemeClass(darkClass: string, lightClass: string) {
   const { resolvedTheme } = useTheme();
@@ -208,6 +209,103 @@ export function ThemeAwareProgressBar({
           width: `${Math.min(100, (value / maxValue) * 100)}%`,
         }}
       />
+    </div>
+  );
+}
+
+export function ThemeAwareCalendarDay({ 
+  day,
+  isToday,
+  children,
+  className,
+  ...props 
+}: { 
+  day: number | null;
+  isToday: boolean;
+  children?: ReactNode;
+  className?: string;
+} & React.HTMLAttributes<HTMLDivElement>) {
+  const dayClass = useMountedThemeClass(
+    "bg-black/20 hover:bg-black/30 border-gray-800",
+    "bg-muted/20 hover:bg-muted/50 border-gray-200"
+  );
+
+  const todayClass = useMountedThemeClass(
+    "border-white",
+    "border-black"
+  );
+
+  if (!dayClass) {
+    return (
+      <div
+        className={cn(
+          "min-h-[80px] p-1 border rounded-md",
+          day === null ? "bg-muted/20" : "hover:bg-muted/50",
+          isToday ? "border-black" : "border-border",
+          className
+        )}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={cn(
+        "min-h-[80px] p-1 border rounded-md",
+        day === null ? dayClass : dayClass,
+        isToday ? todayClass : "border-border",
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+}
+
+export function ThemeAwareSubscriptionItem({ 
+  name, 
+  price, 
+  currency, 
+  billingCycle 
+}: { 
+  name: string
+  price: number
+  currency: Currency
+  billingCycle: { interval: number; unit: string }
+}) {
+  const itemClass = useMountedThemeClass(
+    "bg-white/10 text-white",
+    "bg-black/10 text-black"
+  );
+
+  const formatBillingCycle = (billingCycle: { interval: number; unit: string }): string => {
+    if (billingCycle.interval === 1) {
+      return billingCycle.unit.slice(0, -1) + "ly" // e.g., "monthly", "yearly"
+    }
+    return `every ${billingCycle.interval} ${billingCycle.unit}`
+  }
+
+  if (!itemClass) {
+    return (
+      <div
+        className="text-xs px-2 py-1 rounded-full bg-black/10 text-black truncate"
+        title={`${name} - ${formatCurrency(price, currency)}/${formatBillingCycle(billingCycle)}`}
+      >
+        {name}
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={`text-xs px-2 py-1 rounded-full ${itemClass} truncate`}
+      title={`${name} - ${formatCurrency(price, currency)}/${formatBillingCycle(billingCycle)}`}
+    >
+      {name}
     </div>
   );
 } 
