@@ -7,7 +7,7 @@ import { generateSampleData } from "@/lib/sample-data"
 import { X } from "lucide-react"
 
 import type { Subscription } from "@/types/subscription"
-import { ThemeAwareAddButton } from "@/components/ui/custom-theme-components"
+import { ThemeAwareAddButton, ThemeAwareModal } from "@/components/ui/custom-theme-components"
 import { TabsContent, TabsList, TabsTrigger, Tabs } from "@/components/ui/tabs"
 import SubscriptionStats from "./subscription-stats"
 import SubscriptionCalendar from "./subscription-calendar"
@@ -113,33 +113,31 @@ export default function SubscriptionDashboard() {
           </Tabs>
       
           {(isAddingNew || editingSubscription) && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-              <div className="relative bg-white p-8 rounded-xl w-full max-w-xl mx-auto shadow-md">
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-xl font-bold mb-4">
-                    {editingSubscription ? "Edit Subscription" : "Add New Subscription"}
-                  </h2>
-                  <button
-                    className="text-gray-500 hover:text-gray-800"
-                    onClick={() => {
-                      setIsAddingNew(false)
-                      setEditingSubscription(null)
-                    }}
-                    aria-label="Close"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
-                <AddSubscriptionForm
-                  onSubmit={editingSubscription ? updateSubscription : addSubscription}
-                  onCancel={() => {
+            <ThemeAwareModal>
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-bold mb-4">
+                  {editingSubscription ? "Edit Subscription" : "Add New Subscription"}
+                </h2>
+                <button
+                  className="text-gray-500 hover:text-gray-800"
+                  onClick={() => {
                     setIsAddingNew(false)
                     setEditingSubscription(null)
                   }}
-                  initialData={editingSubscription}
-                />
+                  aria-label="Close"
+                >
+                  <X className="w-5 h-5" />
+                </button>
               </div>
-            </div>
+              <AddSubscriptionForm
+                onSubmit={editingSubscription ? updateSubscription : addSubscription}
+                onCancel={() => {
+                  setIsAddingNew(false)
+                  setEditingSubscription(null)
+                }}
+                initialData={editingSubscription}
+              />
+            </ThemeAwareModal>
           )}
         </div>
       )
