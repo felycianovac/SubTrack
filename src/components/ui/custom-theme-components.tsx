@@ -165,4 +165,49 @@ export function ThemeAwareModal({
       </div>
     </div>
   );
+}
+
+export function ThemeAwareProgressBar({ 
+  value,
+  maxValue,
+  className,
+  ...props 
+}: { 
+  value: number;
+  maxValue: number;
+  className?: string;
+} & React.HTMLAttributes<HTMLDivElement>) {
+  const trackClass = useMountedThemeClass(
+    "bg-gray-800",
+    "bg-gray-100"
+  );
+
+  const barClass = useMountedThemeClass(
+    "bg-white",
+    "bg-black"
+  );
+
+  if (!trackClass || !barClass) {
+    return (
+      <div className={cn("w-full h-2 bg-gray-100 rounded-full overflow-hidden", className)} {...props}>
+        <div
+          className="h-full bg-black"
+          style={{
+            width: `${Math.min(100, (value / maxValue) * 100)}%`,
+          }}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className={cn("w-full h-2 rounded-full overflow-hidden", trackClass, className)} {...props}>
+      <div
+        className={cn("h-full", barClass)}
+        style={{
+          width: `${Math.min(100, (value / maxValue) * 100)}%`,
+        }}
+      />
+    </div>
+  );
 } 
