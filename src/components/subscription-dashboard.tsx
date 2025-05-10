@@ -7,10 +7,12 @@ import { generateSampleData } from "@/lib/sample-data"
 import { X } from "lucide-react"
 
 import type { Subscription } from "@/types/subscription"
+import { ThemeAwareAddButton } from "@/components/ui/theme-aware-button"
 import { TabsContent, TabsList, TabsTrigger, Tabs } from "@/components/ui/tabs"
 import SubscriptionStats from "./subscription-stats"
 import SubscriptionCalendar from "./subscription-calendar"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { Button } from "./ui/button"
 
 
 export default function SubscriptionDashboard() {
@@ -82,16 +84,15 @@ export default function SubscriptionDashboard() {
             <div className="absolute top-4 right-4 z-50">
              <ThemeToggle />
             </div>
-              <button
-                onClick={() => {
-                  setIsAddingNew(true)
-                  setEditingSubscription(null)
-                }}
-                className="px-5 py-2.5 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:opacity-90 transition-colors"
-                >
-                Add Subscription
-              </button>
+            <ThemeAwareAddButton
+            onClick={() => {
+              setIsAddingNew(true)
+              setEditingSubscription(null)
+           }}>
+            Add Subscription
+            </ThemeAwareAddButton>
             </div>
+            
       
             <TabsContent value="list">
               {/* Your existing layout starts here */}
