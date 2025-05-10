@@ -1,11 +1,12 @@
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { formatCurrency, formatDate, getDaysUntil } from "@/lib/utils"
+import { ThemeAwareDropdownMenuContent } from "@/components/ui/custom-theme-components"
 import type { Subscription } from "@/types/subscription"
 import { Edit, ExternalLink, MoreVertical, Pause, Play, Trash2, X } from "lucide-react"
 import { useState, useMemo } from "react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 
 
@@ -193,7 +194,7 @@ export default function SubscriptionList({ subscriptions, onEdit, onDelete, onSt
                         <MoreVertical className="h-4 w-4" />
                         <span className="sr-only">Open menu</span>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
+                      <ThemeAwareDropdownMenuContent>
                         <DropdownMenuItem onClick={() => onEdit(subscription)}>
                           <Edit className="mr-2 h-4 w-4" />
                           Edit
@@ -224,7 +225,7 @@ export default function SubscriptionList({ subscriptions, onEdit, onDelete, onSt
                           <Trash2 className="mr-2 h-4 w-4" />
                           Delete
                         </DropdownMenuItem>
-                        </DropdownMenuContent>
+                        </ThemeAwareDropdownMenuContent>
                       </DropdownMenu>
                   </div>
                 </CardContent>

@@ -7,7 +7,7 @@ import { generateSampleData } from "@/lib/sample-data"
 import { X } from "lucide-react"
 
 import type { Subscription } from "@/types/subscription"
-import { ThemeAwareAddButton } from "@/components/ui/theme-aware-button"
+import { ThemeAwareAddButton } from "@/components/ui/custom-theme-components"
 import { TabsContent, TabsList, TabsTrigger, Tabs } from "@/components/ui/tabs"
 import SubscriptionStats from "./subscription-stats"
 import SubscriptionCalendar from "./subscription-calendar"
