@@ -90,13 +90,13 @@ const SelectContent = React.forwardRef<
           position === "popper" &&
             "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]",
         )}
-        style={{
-          backgroundColor: "white",  // hard solid background
-          color: "black",
-          opacity: 1,
-          backdropFilter: "none", // disable any backdrop
-          filter: "none",          // disable any filter
-        }}
+        // style={{
+        //   backgroundColor: "white",  // hard solid background
+        //   color: "black",
+        //   opacity: 1,
+        //   backdropFilter: "none", // disable any backdrop
+        //   filter: "none",          // disable any filter
+        // }}
       >
         
         {children}
