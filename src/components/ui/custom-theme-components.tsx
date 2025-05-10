@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { DropdownMenuContent } from "@/components/ui/dropdown-menu";
+import { DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { useTheme } from "next-themes";
 import { useEffect, useState, ReactNode, MouseEventHandler } from "react";
+import { cn } from "@/lib/utils";
 
 function useMountedThemeClass(darkClass: string, lightClass: string) {
   const { resolvedTheme } = useTheme();
@@ -59,3 +60,25 @@ export function ThemeAwareDropdownMenuContent({ children }: { children: ReactNod
 
   return <DropdownMenuContent className={contentClass}>{children}</DropdownMenuContent>;
 }
+
+export function ThemeAwareDropdownMenuItem({ 
+  children, 
+  onClick,
+  className,
+  ...props 
+}: { 
+  children: ReactNode;
+  onClick?: MouseEventHandler<HTMLDivElement>;
+  className?: string;
+} & React.ComponentPropsWithoutRef<typeof DropdownMenuItem>) {
+  const itemClass = useMountedThemeClass(
+    "hover:bg-gray-900",
+    "hover:bg-gray-100"
+  );
+
+  if (!itemClass) {
+    return <DropdownMenuItem onClick={onClick} className={className} {...props}>{children}</DropdownMenuItem>;
+  }
+
+  return <DropdownMenuItem onClick={onClick} className={cn(itemClass, className)} {...props}>{children}</DropdownMenuItem>;
+} 

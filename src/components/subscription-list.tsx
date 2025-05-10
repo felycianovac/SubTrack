@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { formatCurrency, formatDate, getDaysUntil } from "@/lib/utils"
-import { ThemeAwareDropdownMenuContent } from "@/components/ui/custom-theme-components"
+import { ThemeAwareDropdownMenuContent, ThemeAwareDropdownMenuItem } from "@/components/ui/custom-theme-components"
 import type { Subscription } from "@/types/subscription"
 import { Edit, ExternalLink, MoreVertical, Pause, Play, Trash2, X } from "lucide-react"
 import { useState, useMemo } from "react"
@@ -195,36 +195,36 @@ export default function SubscriptionList({ subscriptions, onEdit, onDelete, onSt
                         <span className="sr-only">Open menu</span>
                       </DropdownMenuTrigger>
                       <ThemeAwareDropdownMenuContent>
-                        <DropdownMenuItem onClick={() => onEdit(subscription)}>
+                        <ThemeAwareDropdownMenuItem onClick={() => onEdit(subscription)}>
                           <Edit className="mr-2 h-4 w-4" />
                           Edit
-                        </DropdownMenuItem>
+                        </ThemeAwareDropdownMenuItem>
                         {subscription.status === "active" && (
-                          <DropdownMenuItem onClick={() => onStatusChange(subscription.id, "paused")}>
+                          <ThemeAwareDropdownMenuItem onClick={() => onStatusChange(subscription.id, "paused")}>
                           <Pause className="mr-2 h-4 w-4" />
                           Pause
-                        </DropdownMenuItem>
+                        </ThemeAwareDropdownMenuItem>
                         )}
                         
                          {(subscription.status === "paused" || subscription.status === "cancelled") && (
-                          <DropdownMenuItem onClick={() => onStatusChange(subscription.id, "active")}>
+                          <ThemeAwareDropdownMenuItem onClick={() => onStatusChange(subscription.id, "active")}>
                           <Play className="mr-2 h-4 w-4" />
                           Activate
-                        </DropdownMenuItem>
+                        </ThemeAwareDropdownMenuItem>
                         )}
                         {subscription.status !== "cancelled" && (
-                          <DropdownMenuItem onClick={() => onStatusChange(subscription.id, "cancelled")}>
+                          <ThemeAwareDropdownMenuItem onClick={() => onStatusChange(subscription.id, "cancelled")}>
                           <X className="mr-2 h-4 w-4" />
                           Cancel
-                        </DropdownMenuItem>
+                        </ThemeAwareDropdownMenuItem>
                         )}
-                         <DropdownMenuItem
+                         <ThemeAwareDropdownMenuItem
                           onClick={() => onDelete(subscription.id)}
                           className="text-red-600 focus:text-red-600"
                         >
                           <Trash2 className="mr-2 h-4 w-4" />
                           Delete
-                        </DropdownMenuItem>
+                        </ThemeAwareDropdownMenuItem>
                         </ThemeAwareDropdownMenuContent>
                       </DropdownMenu>
                   </div>

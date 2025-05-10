@@ -12,7 +12,6 @@ import { TabsContent, TabsList, TabsTrigger, Tabs } from "@/components/ui/tabs"
 import SubscriptionStats from "./subscription-stats"
 import SubscriptionCalendar from "./subscription-calendar"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { Button } from "./ui/button"
 
 
 export default function SubscriptionDashboard() {
