@@ -1,11 +1,12 @@
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { formatCurrency, formatDate, getDaysUntil } from "@/lib/utils"
+import { ThemeAwareDropdownMenuContent, ThemeAwareDropdownMenuItem, ThemeAwareSelectContent, ThemeAwareSelectItem } from "@/components/ui/custom-theme-components"
 import type { Subscription } from "@/types/subscription"
 import { Edit, ExternalLink, MoreVertical, Pause, Play, Trash2, X } from "lucide-react"
 import { useState, useMemo } from "react"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Select, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { DropdownMenu, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 
 
@@ -104,13 +105,13 @@ export default function SubscriptionList({ subscriptions, onEdit, onDelete, onSt
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Select category" />
           </SelectTrigger>
-          <SelectContent>
+          <ThemeAwareSelectContent>
             {categories.map((category) => (
-              <SelectItem key={category} value={category}>
+              <ThemeAwareSelectItem key={category} value={category}>
                 {category === "all" ? "All Categories" : category}
-              </SelectItem>
+              </ThemeAwareSelectItem>
             ))}
-          </SelectContent>
+          </ThemeAwareSelectContent>
         </Select>
       </div>
 
@@ -120,13 +121,13 @@ export default function SubscriptionList({ subscriptions, onEdit, onDelete, onSt
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="name">Name</SelectItem>
-              <SelectItem value="priceHigh">Price (High to Low)</SelectItem>
-              <SelectItem value="priceLow">Price (Low to High)</SelectItem>
-              <SelectItem value="expiringSoon">Expiring Soon</SelectItem>
-              <SelectItem value="longestRemaining">Longest Remaining</SelectItem>
-            </SelectContent>
+            <ThemeAwareSelectContent>
+              <ThemeAwareSelectItem value="name">Name</ThemeAwareSelectItem>
+              <ThemeAwareSelectItem value="priceHigh">Price (High to Low)</ThemeAwareSelectItem>
+              <ThemeAwareSelectItem value="priceLow">Price (Low to High)</ThemeAwareSelectItem>
+              <ThemeAwareSelectItem value="expiringSoon">Expiring Soon</ThemeAwareSelectItem>
+              <ThemeAwareSelectItem value="longestRemaining">Longest Remaining</ThemeAwareSelectItem>
+            </ThemeAwareSelectContent>
           </Select>
         </div>
       </div>
@@ -193,38 +194,37 @@ export default function SubscriptionList({ subscriptions, onEdit, onDelete, onSt
                         <MoreVertical className="h-4 w-4" />
                         <span className="sr-only">Open menu</span>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => onEdit(subscription)}>
+                      <ThemeAwareDropdownMenuContent>
+                        <ThemeAwareDropdownMenuItem onClick={() => onEdit(subscription)}>
                           <Edit className="mr-2 h-4 w-4" />
                           Edit
-                        </DropdownMenuItem>
+                        </ThemeAwareDropdownMenuItem>
                         {subscription.status === "active" && (
-                          <DropdownMenuItem onClick={() => onStatusChange(subscription.id, "paused")}>
+                          <ThemeAwareDropdownMenuItem onClick={() => onStatusChange(subscription.id, "paused")}>
                           <Pause className="mr-2 h-4 w-4" />
                           Pause
-                        </DropdownMenuItem>
+                        </ThemeAwareDropdownMenuItem>
                         )}
-                        
                          {(subscription.status === "paused" || subscription.status === "cancelled") && (
-                          <DropdownMenuItem onClick={() => onStatusChange(subscription.id, "active")}>
+                          <ThemeAwareDropdownMenuItem onClick={() => onStatusChange(subscription.id, "active")}>
                           <Play className="mr-2 h-4 w-4" />
                           Activate
-                        </DropdownMenuItem>
+                        </ThemeAwareDropdownMenuItem>
                         )}
                         {subscription.status !== "cancelled" && (
-                          <DropdownMenuItem onClick={() => onStatusChange(subscription.id, "cancelled")}>
+                          <ThemeAwareDropdownMenuItem onClick={() => onStatusChange(subscription.id, "cancelled")}>
                           <X className="mr-2 h-4 w-4" />
                           Cancel
-                        </DropdownMenuItem>
+                        </ThemeAwareDropdownMenuItem>
                         )}
-                         <DropdownMenuItem
+                         <ThemeAwareDropdownMenuItem
                           onClick={() => onDelete(subscription.id)}
                           className="text-red-600 focus:text-red-600"
                         >
                           <Trash2 className="mr-2 h-4 w-4" />
                           Delete
-                        </DropdownMenuItem>
-                        </DropdownMenuContent>
+                        </ThemeAwareDropdownMenuItem>
+                        </ThemeAwareDropdownMenuContent>
                       </DropdownMenu>
                   </div>
                 </CardContent>

@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { formatCurrency } from "@/lib/utils"
+import { ThemeAwareCalendarDay, ThemeAwareSubscriptionItem } from "@/components/ui/custom-theme-components"
 
 interface SubscriptionCalendarProps {
   subscriptions: Subscription[]
@@ -127,34 +128,32 @@ export default function SubscriptionCalendar({ subscriptions }: SubscriptionCale
             ))}
 
             {calendarDays.map((day, index) => (
-              <div
+              <ThemeAwareCalendarDay
                 key={index}
-                className={`min-h-[80px] p-1 border rounded-md ${day === null ? "bg-muted/20" : "hover:bg-muted/50"} ${
+                day={day}
+                isToday={
                   day === new Date().getDate() &&
                   currentDate.getMonth() === new Date().getMonth() &&
                   currentDate.getFullYear() === new Date().getFullYear()
-                    ? "border-primary"
-                    : "border-border"
-                }`}
+                }
               >
                 {day !== null && (
                   <>
                     <div className="text-right text-sm font-medium">{day}</div>
                     <div className="mt-1 space-y-1">
                       {subscriptionsByDay[day]?.map((subscription) => (
-                        <div
-                        key={subscription.id}
-                        className="text-xs px-2 py-1 rounded-full bg-black/10 text-black truncate"
-                        title={`${subscription.name} - ${formatCurrency(subscription.price, subscription.currency)}/${formatBillingCycle(subscription.billingCycle)}`}
-                      >
-                        {subscription.name}
-                      </div>
-                      
+                        <ThemeAwareSubscriptionItem
+                          key={subscription.id}
+                          name={subscription.name}
+                          price={subscription.price}
+                          currency={subscription.currency}
+                          billingCycle={subscription.billingCycle}
+                        />
                       ))}
                     </div>
                   </>
                 )}
-              </div>
+              </ThemeAwareCalendarDay>
             ))}
           </div>
         </CardContent>

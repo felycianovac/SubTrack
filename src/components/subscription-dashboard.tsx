@@ -7,10 +7,12 @@ import { generateSampleData } from "@/lib/sample-data"
 import { X } from "lucide-react"
 
 import type { Subscription } from "@/types/subscription"
+import { ThemeAwareAddButton, ThemeAwareModal } from "@/components/ui/custom-theme-components"
 import { TabsContent, TabsList, TabsTrigger, Tabs } from "@/components/ui/tabs"
-import { Sub } from "node_modules/@radix-ui/react-dropdown-menu/dist"
 import SubscriptionStats from "./subscription-stats"
 import SubscriptionCalendar from "./subscription-calendar"
+import { ThemeToggle } from "@/components/theme-toggle"
+
 
 export default function SubscriptionDashboard() {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
@@ -67,27 +69,29 @@ export default function SubscriptionDashboard() {
         <div className="container mx-auto p-4 md:p-6 space-y-6">
           <Tabs defaultValue="list">
             <div className="flex justify-between items-center mb-4">
-            <TabsList className="inline-flex items-center bg-gray-100 p-1 rounded-lg border border-gray-200">
+            <TabsList className="inline-flex items-center bg-muted p-1 rounded-lg border">
             <TabsTrigger value="list"
-              className="px-4 py-2 text-sm font-medium rounded-md text-gray-500 data-[state=active]:bg-white data-[state=active]:text-black hover:text-black transition-colors"
+              className="px-4 py-2 text-sm font-medium rounded-md text-muted-foreground data-[state=active]:bg-gray-50 data-[state=active]:text-black hover:text-foreground transition-colors"
             >List</TabsTrigger>
             <TabsTrigger value="stats"
-              className="px-4 py-2 text-sm font-medium rounded-md text-gray-500 data-[state=active]:bg-white data-[state=active]:text-black hover:text-black transition-colors"
-            >Statistics</TabsTrigger>
+              className="px-4 py-2 text-sm font-medium rounded-md text-muted-foreground data-[state=active]:bg-gray-50 data-[state=active]:text-black hover:text-foreground transition-colors"
+              >Statistics</TabsTrigger>
             <TabsTrigger value="calendar"
-              className="px-4 py-2 text-sm font-medium rounded-md text-gray-500 data-[state=active]:bg-white data-[state=active]:text-black hover:text-black transition-colors"
+              className="px-4 py-2 text-sm font-medium rounded-md text-muted-foreground data-[state=active]:bg-gray-50 data-[state=active]:text-black hover:text-foreground transition-colors"
               >Calendar</TabsTrigger>
             </TabsList>
-              <button
-                onClick={() => {
-                  setIsAddingNew(true)
-                  setEditingSubscription(null)
-                }}
-                className="px-5 py-2.5 text-sm font-medium rounded-md bg-black text-white hover:bg-black/80 transition-colors"
-                >
-                Add Subscription
-              </button>
+            <div className="absolute top-4 right-4 z-50">
+             <ThemeToggle />
             </div>
+            <ThemeAwareAddButton
+            onClick={() => {
+              setIsAddingNew(true)
+              setEditingSubscription(null)
+           }}>
+            Add Subscription
+            </ThemeAwareAddButton>
+            </div>
+            
       
             <TabsContent value="list">
               {/* Your existing layout starts here */}
@@ -109,33 +113,31 @@ export default function SubscriptionDashboard() {
           </Tabs>
       
           {(isAddingNew || editingSubscription) && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-              <div className="relative bg-white p-8 rounded-xl w-full max-w-xl mx-auto shadow-md">
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-xl font-bold mb-4">
-                    {editingSubscription ? "Edit Subscription" : "Add New Subscription"}
-                  </h2>
-                  <button
-                    className="text-gray-500 hover:text-gray-800"
-                    onClick={() => {
-                      setIsAddingNew(false)
-                      setEditingSubscription(null)
-                    }}
-                    aria-label="Close"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
-                <AddSubscriptionForm
-                  onSubmit={editingSubscription ? updateSubscription : addSubscription}
-                  onCancel={() => {
+            <ThemeAwareModal>
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-bold mb-4">
+                  {editingSubscription ? "Edit Subscription" : "Add New Subscription"}
+                </h2>
+                <button
+                  className="text-gray-500 hover:text-gray-800"
+                  onClick={() => {
                     setIsAddingNew(false)
                     setEditingSubscription(null)
                   }}
-                  initialData={editingSubscription}
-                />
+                  aria-label="Close"
+                >
+                  <X className="w-5 h-5" />
+                </button>
               </div>
-            </div>
+              <AddSubscriptionForm
+                onSubmit={editingSubscription ? updateSubscription : addSubscription}
+                onCancel={() => {
+                  setIsAddingNew(false)
+                  setEditingSubscription(null)
+                }}
+                initialData={editingSubscription}
+              />
+            </ThemeAwareModal>
           )}
         </div>
       )

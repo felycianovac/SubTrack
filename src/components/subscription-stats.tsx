@@ -4,6 +4,7 @@ import { useMemo } from "react"
 import type { Subscription } from "@/types/subscription"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { formatCurrency } from "@/lib/utils"
+import { ThemeAwareProgressBar } from "@/components/ui/custom-theme-components"
 
 interface SubscriptionStatsProps {
   subscriptions: Subscription[]
@@ -129,14 +130,10 @@ export default function SubscriptionStats({ subscriptions }: SubscriptionStatsPr
                       {formatCurrency(amounts.monthly, primaryCurrency as any)}/month
                     </span>
                   </div>
-                  <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-black"
-                      style={{
-                        width: `${Math.min(100, (amounts.monthly / stats.monthlyTotal) * 100)}%`,
-                      }}
-                    />
-                  </div>
+                  <ThemeAwareProgressBar
+                    value={amounts.monthly}
+                    maxValue={stats.monthlyTotal}
+                  />
                 </div>
               ))}
             </div>
