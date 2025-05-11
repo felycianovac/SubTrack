@@ -97,8 +97,9 @@ export default function SubscriptionDashboard() {
               <Button
               variant="outline"
               onClick={() => {
-                const sample = generateSampleData()
-                setSubscriptions(sample)
+                const sample = generateSampleData().map(s => ({ ...s, sample: true }))
+                const updated = [...subscriptions, ...sample]
+                setSubscriptions(updated)
                 localStorage.setItem("subscriptions", JSON.stringify(sample))
                 localStorage.setItem("sampleDataActive", "true")
                 setSampleDataActive(true)
@@ -126,7 +127,8 @@ export default function SubscriptionDashboard() {
           variant="outline"
           className="text-red-500 hover:text-red-700 text-xs"
           onClick={() => {
-            setSubscriptions([])
+            const filtered = subscriptions.filter(sub => !sub.sample)
+            setSubscriptions(filtered)
             localStorage.removeItem("subscriptions")
             localStorage.removeItem("sampleDataActive")
             setSampleDataActive(false)}}> Remove Sample Data

@@ -23,4 +23,6 @@ export interface Subscription {
     notes?: string;
     status: SubscriptionStatus;
     selected?: boolean;
+    sample?: boolean 
+
   }

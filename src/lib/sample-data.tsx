@@ -21,6 +21,7 @@ export function generateSampleData(): Subscription[] {
       category: "Entertainment",
       url: "https://netflix.com",
       status: "active",
+      sample: true,
     },
     {
       id: "2",
@@ -39,6 +40,7 @@ export function generateSampleData(): Subscription[] {
       category: "Music",
       url: "https://spotify.com",
       status: "active",
+      sample: true,
     },
     {
       id: "3",
@@ -58,6 +60,7 @@ export function generateSampleData(): Subscription[] {
       url: "https://adobe.com",
       notes: "Business expense, reimbursable",
       status: "active",
+      sample: true,
     },
     {
       id: "4",
@@ -76,6 +79,7 @@ export function generateSampleData(): Subscription[] {
       category: "Shopping",
       url: "https://amazon.com",
       status: "active",
+      sample: true,
     },
     {
       id: "5",
@@ -94,6 +98,7 @@ export function generateSampleData(): Subscription[] {
       category: "Fitness",
       notes: "Can freeze for up to 3 months per year",
       status: "paused",
+      sample: true,
     },
     {
       id: "6",
@@ -112,6 +117,7 @@ export function generateSampleData(): Subscription[] {
       category: "Entertainment",
       url: "https://disneyplus.com",
       status: "cancelled",
+      sample: true,
     },
     {
       id: "7",
@@ -130,6 +136,7 @@ export function generateSampleData(): Subscription[] {
       category: "Software",
       url: "https://microsoft.com",
       status: "active",
+      sample: true,
     },
   ]
 }
