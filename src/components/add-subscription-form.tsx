@@ -14,9 +14,10 @@ import type {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Select, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Textarea } from "@/components/ui/textarea"
+import { ThemeAwareSelectContent, ThemeAwareSelectItem } from "./ui/custom-theme-components"
 
 interface AddSubscriptionFormProps {
   onSubmit: (subscription: Subscription | Omit<Subscription, "id">) => void
@@ -98,11 +99,18 @@ export default function AddSubscriptionForm({ onSubmit, onCancel, initialData }:
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target
-    setFormData({
-      ...formData,
-      [name]: type === "number" ? Number.parseFloat(value) : value,
-    })
+  
+    setFormData((prev) => ({
+      ...prev,
+      [name]:
+        type === "number"
+          ? Number.parseFloat(value)
+          : type === "date"
+          ? new Date(value)
+          : value,
+    }))
   }
+  
 
   const handleSelectChange = (name: string, value: string) => {
     setFormData({
@@ -131,15 +139,6 @@ export default function AddSubscriptionForm({ onSubmit, onCancel, initialData }:
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!formData.name.trim()) {
-      alert("Please enter a subscription name")
-      return
-    }
-
-    if (formData.price <= 0) {
-      alert("Price must be greater than 0")
-      return
-    }
 
     const processedData = {
       ...formData,
@@ -161,7 +160,7 @@ export default function AddSubscriptionForm({ onSubmit, onCancel, initialData }:
   return (
     <form onSubmit={handleSubmit} className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
       <div className="grid gap-2">
-        <Label htmlFor="name">Subscription Name</Label>
+        <Label htmlFor="name">Subscription Name *</Label>
         <Input
           id="name"
           name="name"
@@ -179,7 +178,7 @@ export default function AddSubscriptionForm({ onSubmit, onCancel, initialData }:
             id="price"
             name="price"
             type="number"
-            step="0.01"
+            step="0.1"
             min="0"
             value={formData.price}
             onChange={handleChange}
@@ -193,13 +192,13 @@ export default function AddSubscriptionForm({ onSubmit, onCancel, initialData }:
             <SelectTrigger>
               <SelectValue placeholder="Select currency" />
             </SelectTrigger>
-            <SelectContent>
+            <ThemeAwareSelectContent>
               {CURRENCIES.map((currency) => (
-                <SelectItem key={currency} value={currency}>
+                <ThemeAwareSelectItem key={currency} value={currency}>
                   {currency}
-                </SelectItem>
+                </ThemeAwareSelectItem>
               ))}
-            </SelectContent>
+            </ThemeAwareSelectContent>
           </Select>
         </div>
       </div>
@@ -225,13 +224,13 @@ export default function AddSubscriptionForm({ onSubmit, onCancel, initialData }:
               <SelectTrigger>
                 <SelectValue placeholder="Select unit" />
               </SelectTrigger>
-              <SelectContent>
+              <ThemeAwareSelectContent>
                 {TIME_UNITS.map((unit) => (
-                  <SelectItem key={unit} value={unit}>
+                  <ThemeAwareSelectItem key={unit} value={unit}>
                     {unit}
-                  </SelectItem>
+                  </ThemeAwareSelectItem>
                 ))}
-              </SelectContent>
+              </ThemeAwareSelectContent>
             </Select>
           </div>
         </div>
@@ -248,6 +247,7 @@ export default function AddSubscriptionForm({ onSubmit, onCancel, initialData }:
 
       <div className="grid grid-cols-2 gap-4">
         <div className="grid gap-2">
+          
           <Label htmlFor="startDate">Start Date</Label>
           <Input
             id="startDate"
@@ -255,6 +255,7 @@ export default function AddSubscriptionForm({ onSubmit, onCancel, initialData }:
             type="date"
             value={formData.startDate.toISOString().split("T")[0]}
             onChange={handleChange}
+            
             required
           />
         </div>
@@ -281,16 +282,16 @@ export default function AddSubscriptionForm({ onSubmit, onCancel, initialData }:
           <SelectTrigger>
             <SelectValue placeholder="Select payment method" />
           </SelectTrigger>
-          <SelectContent>
+          <ThemeAwareSelectContent>
             {PAYMENT_METHODS.map((method) => (
-              <SelectItem key={method} value={method}>
+              <ThemeAwareSelectItem key={method} value={method}>
                 {method
                   .split("_")
                   .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
                   .join(" ")}
-              </SelectItem>
+              </ThemeAwareSelectItem>
             ))}
-          </SelectContent>
+          </ThemeAwareSelectContent>
         </Select>
       </div>
 
@@ -311,13 +312,13 @@ export default function AddSubscriptionForm({ onSubmit, onCancel, initialData }:
           <SelectTrigger>
             <SelectValue placeholder="Select category" />
           </SelectTrigger>
-          <SelectContent>
+          <ThemeAwareSelectContent>
             {CATEGORIES.map((category) => (
-              <SelectItem key={category} value={category}>
+              <ThemeAwareSelectItem key={category} value={category}>
                 {category}
-              </SelectItem>
+              </ThemeAwareSelectItem>
             ))}
-          </SelectContent>
+          </ThemeAwareSelectContent>
         </Select>
       </div>
 
@@ -354,13 +355,13 @@ export default function AddSubscriptionForm({ onSubmit, onCancel, initialData }:
           <SelectTrigger>
             <SelectValue placeholder="Select status" />
           </SelectTrigger>
-          <SelectContent>
+          <ThemeAwareSelectContent>
             {STATUSES.map((status) => (
-              <SelectItem key={status} value={status}>
+              <ThemeAwareSelectItem key={status} value={status}>
                 {status.charAt(0).toUpperCase() + status.slice(1)}
-              </SelectItem>
+              </ThemeAwareSelectItem>
             ))}
-          </SelectContent>
+          </ThemeAwareSelectContent>
         </Select>
       </div>
 

@@ -5,6 +5,7 @@ import { useEffect, useState, ReactNode, MouseEventHandler } from "react";
 import { cn, formatCurrency } from "@/lib/utils";
 import { SelectItem, SelectContent } from "@/components/ui/select";
 import type { Currency } from "@/types/subscription";
+import { Badge } from "@/components/ui/badge";
 
 function useMountedThemeClass(darkClass: string, lightClass: string) {
   const { resolvedTheme } = useTheme();
@@ -309,3 +310,31 @@ export function ThemeAwareSubscriptionItem({
     </div>
   );
 } 
+
+export function ThemeAwareBadge({
+  children,
+  className,
+  ...props
+}: {
+  children: React.ReactNode;
+  className?: string;
+} & React.ComponentPropsWithoutRef<typeof Badge>) {
+  const badgeClass = useMountedThemeClass(
+    "bg-gray-800 text-white",
+    "bg-gray-100 text-black"
+  );
+
+  if (!badgeClass) {
+    return (
+      <Badge className={className} {...props}>
+        {children}
+      </Badge>
+    );
+  }
+
+  return (
+    <Badge className={cn(badgeClass, className)} {...props}>
+      {children}
+    </Badge>
+  );
+}

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import SubscriptionList from "@/components/subscription-list"
 import AddSubscriptionForm from "@/components/add-subscription-form"
 import { generateSampleData } from "@/lib/sample-data"
+import { Button } from "@/components/ui/button"
 import { X } from "lucide-react"
 
 import type { Subscription } from "@/types/subscription"
@@ -18,18 +19,27 @@ export default function SubscriptionDashboard() {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
   const [isAddingNew, setIsAddingNew] = useState(false)
   const [editingSubscription, setEditingSubscription] = useState<Subscription | null>(null)
+  const [sampleDataActive, setSampleDataActive] = useState(false)
+
 
 
   useEffect(() => {
     const saved = localStorage.getItem("subscriptions")
+    const sampleFlag = localStorage.getItem("sampleDataActive") === "true"
+  
     if (saved) {
       setSubscriptions(JSON.parse(saved))
-    } else {
+      setSampleDataActive(sampleFlag)
+    } else if (sampleFlag) {
       const sample = generateSampleData()
       setSubscriptions(sample)
+      setSampleDataActive(true)
+      localStorage.setItem("subscriptions", JSON.stringify(sample))
+    } else {
+      setSubscriptions([]) // empty state, no sample
     }
   }, [])
-
+  
   const addSubscription = (subscription: Omit<Subscription, "id">) => {
     const newSub: Subscription = {
       ...subscription,
@@ -83,24 +93,50 @@ export default function SubscriptionDashboard() {
             <div className="absolute top-4 right-4 z-50">
              <ThemeToggle />
             </div>
-            <ThemeAwareAddButton
-            onClick={() => {
-              setIsAddingNew(true)
-              setEditingSubscription(null)
-           }}>
-            Add Subscription
-            </ThemeAwareAddButton>
+            <div className="flex gap-2">
+              {!sampleDataActive && (
+              <Button
+              variant="outline"
+              onClick={() => {
+                const sample = generateSampleData().map(s => ({ ...s, sample: true }))
+                const updated = [...subscriptions, ...sample]
+                setSubscriptions(updated)
+                localStorage.setItem("subscriptions", JSON.stringify(sample))
+                localStorage.setItem("sampleDataActive", "true")
+                setSampleDataActive(true)
+              }}> Try Sample Data </Button>)}
+
+              <ThemeAwareAddButton
+                onClick={() => {
+                  setIsAddingNew(true)
+                  setEditingSubscription(null)
+            }}>Add Subscription
+              </ThemeAwareAddButton>
             </div>
-            
-      
+          </div>
+          
             <TabsContent value="list">
-              {/* Your existing layout starts here */}
               <SubscriptionList 
                 subscriptions={subscriptions} 
                 onEdit={setEditingSubscription}
                 onDelete={deleteSubscription}
                 onStatusChange={handleStatusChange}
               />
+              {sampleDataActive && (
+          <div className="flex justify-end mt-2">
+          <Button
+          variant="outline"
+          className="text-red-500 hover:text-red-700 text-xs"
+          onClick={() => {
+            const filtered = subscriptions.filter(sub => !sub.sample)
+            setSubscriptions(filtered)
+            localStorage.removeItem("subscriptions")
+            localStorage.removeItem("sampleDataActive")
+            setSampleDataActive(false)}}> Remove Sample Data
+          </Button>
+  </div>
+)}
+
             </TabsContent>
       
             <TabsContent value="stats">
