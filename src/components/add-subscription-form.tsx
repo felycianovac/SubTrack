@@ -98,11 +98,18 @@ export default function AddSubscriptionForm({ onSubmit, onCancel, initialData }:
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target
-    setFormData({
-      ...formData,
-      [name]: type === "number" ? Number.parseFloat(value) : value,
-    })
+  
+    setFormData((prev) => ({
+      ...prev,
+      [name]:
+        type === "number"
+          ? Number.parseFloat(value)
+          : type === "date"
+          ? new Date(value)
+          : value,
+    }))
   }
+  
 
   const handleSelectChange = (name: string, value: string) => {
     setFormData({
