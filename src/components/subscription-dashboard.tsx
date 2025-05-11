@@ -25,14 +25,21 @@ export default function SubscriptionDashboard() {
 
   useEffect(() => {
     const saved = localStorage.getItem("subscriptions")
+    const sampleFlag = localStorage.getItem("sampleDataActive") === "true"
+  
     if (saved) {
       setSubscriptions(JSON.parse(saved))
-    } else {
+      setSampleDataActive(sampleFlag)
+    } else if (sampleFlag) {
       const sample = generateSampleData()
       setSubscriptions(sample)
+      setSampleDataActive(true)
+      localStorage.setItem("subscriptions", JSON.stringify(sample))
+    } else {
+      setSubscriptions([]) // empty state, no sample
     }
   }, [])
-
+  
   const addSubscription = (subscription: Omit<Subscription, "id">) => {
     const newSub: Subscription = {
       ...subscription,
@@ -93,6 +100,7 @@ export default function SubscriptionDashboard() {
                 const sample = generateSampleData()
                 setSubscriptions(sample)
                 localStorage.setItem("subscriptions", JSON.stringify(sample))
+                localStorage.setItem("sampleDataActive", "true")
                 setSampleDataActive(true)
               }}> Try Sample Data </Button>
 
@@ -106,13 +114,26 @@ export default function SubscriptionDashboard() {
           </div>
           
             <TabsContent value="list">
-              {/* Your existing layout starts here */}
               <SubscriptionList 
                 subscriptions={subscriptions} 
                 onEdit={setEditingSubscription}
                 onDelete={deleteSubscription}
                 onStatusChange={handleStatusChange}
               />
+              {sampleDataActive && (
+          <div className="flex justify-end mt-2">
+          <Button
+          variant="outline"
+          className="text-red-500 hover:text-red-700 text-xs"
+          onClick={() => {
+            setSubscriptions([])
+            localStorage.removeItem("subscriptions")
+            localStorage.removeItem("sampleDataActive")
+            setSampleDataActive(false)}}> Remove Sample Data
+          </Button>
+  </div>
+)}
+
             </TabsContent>
       
             <TabsContent value="stats">
