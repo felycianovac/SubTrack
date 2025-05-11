@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Textarea } from "@/components/ui/textarea"
+import { ThemeAwareSelectContent, ThemeAwareSelectItem } from "./ui/custom-theme-components"
 
 interface AddSubscriptionFormProps {
   onSubmit: (subscription: Subscription | Omit<Subscription, "id">) => void
@@ -191,13 +192,13 @@ export default function AddSubscriptionForm({ onSubmit, onCancel, initialData }:
             <SelectTrigger>
               <SelectValue placeholder="Select currency" />
             </SelectTrigger>
-            <SelectContent>
+            <ThemeAwareSelectContent>
               {CURRENCIES.map((currency) => (
-                <SelectItem key={currency} value={currency}>
+                <ThemeAwareSelectItem key={currency} value={currency}>
                   {currency}
-                </SelectItem>
+                </ThemeAwareSelectItem>
               ))}
-            </SelectContent>
+            </ThemeAwareSelectContent>
           </Select>
         </div>
       </div>
@@ -223,13 +224,13 @@ export default function AddSubscriptionForm({ onSubmit, onCancel, initialData }:
               <SelectTrigger>
                 <SelectValue placeholder="Select unit" />
               </SelectTrigger>
-              <SelectContent>
+              <ThemeAwareSelectContent>
                 {TIME_UNITS.map((unit) => (
-                  <SelectItem key={unit} value={unit}>
+                  <ThemeAwareSelectItem key={unit} value={unit}>
                     {unit}
-                  </SelectItem>
+                  </ThemeAwareSelectItem>
                 ))}
-              </SelectContent>
+              </ThemeAwareSelectContent>
             </Select>
           </div>
         </div>
@@ -279,16 +280,16 @@ export default function AddSubscriptionForm({ onSubmit, onCancel, initialData }:
           <SelectTrigger>
             <SelectValue placeholder="Select payment method" />
           </SelectTrigger>
-          <SelectContent>
+          <ThemeAwareSelectContent>
             {PAYMENT_METHODS.map((method) => (
-              <SelectItem key={method} value={method}>
+              <ThemeAwareSelectItem key={method} value={method}>
                 {method
                   .split("_")
                   .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
                   .join(" ")}
-              </SelectItem>
+              </ThemeAwareSelectItem>
             ))}
-          </SelectContent>
+          </ThemeAwareSelectContent>
         </Select>
       </div>
 
@@ -309,13 +310,13 @@ export default function AddSubscriptionForm({ onSubmit, onCancel, initialData }:
           <SelectTrigger>
             <SelectValue placeholder="Select category" />
           </SelectTrigger>
-          <SelectContent>
+          <ThemeAwareSelectContent>
             {CATEGORIES.map((category) => (
-              <SelectItem key={category} value={category}>
+              <ThemeAwareSelectItem key={category} value={category}>
                 {category}
-              </SelectItem>
+              </ThemeAwareSelectItem>
             ))}
-          </SelectContent>
+          </ThemeAwareSelectContent>
         </Select>
       </div>
 
@@ -352,13 +353,13 @@ export default function AddSubscriptionForm({ onSubmit, onCancel, initialData }:
           <SelectTrigger>
             <SelectValue placeholder="Select status" />
           </SelectTrigger>
-          <SelectContent>
+          <ThemeAwareSelectContent>
             {STATUSES.map((status) => (
-              <SelectItem key={status} value={status}>
+              <ThemeAwareSelectItem key={status} value={status}>
                 {status.charAt(0).toUpperCase() + status.slice(1)}
-              </SelectItem>
+              </ThemeAwareSelectItem>
             ))}
-          </SelectContent>
+          </ThemeAwareSelectContent>
         </Select>
       </div>
 
