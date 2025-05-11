@@ -145,11 +145,6 @@ export function ThemeAwareModal({
     "bg-white text-black border-gray-200"
   );
 
-  const closeButtonClass = useMountedThemeClass(
-    "text-gray-400 hover:text-gray-200",
-    "text-gray-500 hover:text-gray-800"
-  );
-
   if (!modalClass || !contentClass) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">

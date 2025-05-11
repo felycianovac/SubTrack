@@ -1,7 +1,5 @@
 "use client"
 
-import type React from "react"
-
 import { useState, useEffect } from "react"
 import type {
   Subscription,
@@ -55,7 +53,7 @@ const TIME_UNITS: TimeUnit[] = ["days", "weeks", "months", "years"]
 
 const STATUSES: SubscriptionStatus[] = ["active", "paused", "cancelled", "disabled"]
 
-export default function AddSubscriptionForm({ onSubmit, onCancel, initialData }: AddSubscriptionFormProps) {
+export default function AddSubscriptionForm({ onSubmit, initialData }: AddSubscriptionFormProps) {
   const [formData, setFormData] = useState<Omit<Subscription, "id">>({
     name: "",
     price: 0,
