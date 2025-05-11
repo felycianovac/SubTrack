@@ -94,6 +94,7 @@ export default function SubscriptionDashboard() {
              <ThemeToggle />
             </div>
             <div className="flex gap-2">
+              {!sampleDataActive && (
               <Button
               variant="outline"
               onClick={() => {
@@ -103,7 +104,7 @@ export default function SubscriptionDashboard() {
                 localStorage.setItem("subscriptions", JSON.stringify(sample))
                 localStorage.setItem("sampleDataActive", "true")
                 setSampleDataActive(true)
-              }}> Try Sample Data </Button>
+              }}> Try Sample Data </Button>)}
 
               <ThemeAwareAddButton
                 onClick={() => {
