@@ -14,7 +14,7 @@ import type {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Select, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Textarea } from "@/components/ui/textarea"
 import { ThemeAwareSelectContent, ThemeAwareSelectItem } from "./ui/custom-theme-components"
@@ -160,7 +160,7 @@ export default function AddSubscriptionForm({ onSubmit, onCancel, initialData }:
   return (
     <form onSubmit={handleSubmit} className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
       <div className="grid gap-2">
-        <Label htmlFor="name">Subscription Name</Label>
+        <Label htmlFor="name">Subscription Name *</Label>
         <Input
           id="name"
           name="name"
@@ -247,6 +247,7 @@ export default function AddSubscriptionForm({ onSubmit, onCancel, initialData }:
 
       <div className="grid grid-cols-2 gap-4">
         <div className="grid gap-2">
+          
           <Label htmlFor="startDate">Start Date</Label>
           <Input
             id="startDate"
@@ -254,6 +255,7 @@ export default function AddSubscriptionForm({ onSubmit, onCancel, initialData }:
             type="date"
             value={formData.startDate.toISOString().split("T")[0]}
             onChange={handleChange}
+            
             required
           />
         </div>

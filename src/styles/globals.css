@@ -29,3 +29,10 @@
 
   --ring: 215 20.2% 65.1%;
 }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  margin-right: 0;
+  padding: 0;
+  right: -90px;
+  position: relative;
+}
