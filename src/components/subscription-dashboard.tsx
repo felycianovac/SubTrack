@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import SubscriptionList from "@/components/subscription-list"
 import AddSubscriptionForm from "@/components/add-subscription-form"
 import { generateSampleData } from "@/lib/sample-data"
+import { Button } from "@/components/ui/button"
 import { X } from "lucide-react"
 
 import type { Subscription } from "@/types/subscription"
@@ -18,6 +19,8 @@ export default function SubscriptionDashboard() {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
   const [isAddingNew, setIsAddingNew] = useState(false)
   const [editingSubscription, setEditingSubscription] = useState<Subscription | null>(null)
+  const [sampleDataActive, setSampleDataActive] = useState(false)
+
 
 
   useEffect(() => {
@@ -83,16 +86,25 @@ export default function SubscriptionDashboard() {
             <div className="absolute top-4 right-4 z-50">
              <ThemeToggle />
             </div>
-            <ThemeAwareAddButton
-            onClick={() => {
-              setIsAddingNew(true)
-              setEditingSubscription(null)
-           }}>
-            Add Subscription
-            </ThemeAwareAddButton>
+            <div className="flex gap-2">
+              <Button
+              variant="outline"
+              onClick={() => {
+                const sample = generateSampleData()
+                setSubscriptions(sample)
+                localStorage.setItem("subscriptions", JSON.stringify(sample))
+                setSampleDataActive(true)
+              }}> Try Sample Data </Button>
+
+              <ThemeAwareAddButton
+                onClick={() => {
+                  setIsAddingNew(true)
+                  setEditingSubscription(null)
+            }}>Add Subscription
+              </ThemeAwareAddButton>
             </div>
-            
-      
+          </div>
+          
             <TabsContent value="list">
               {/* Your existing layout starts here */}
               <SubscriptionList 
