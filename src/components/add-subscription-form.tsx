@@ -138,15 +138,6 @@ export default function AddSubscriptionForm({ onSubmit, onCancel, initialData }:
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!formData.name.trim()) {
-      alert("Please enter a subscription name")
-      return
-    }
-
-    if (formData.price <= 0) {
-      alert("Price must be greater than 0")
-      return
-    }
 
     const processedData = {
       ...formData,
@@ -186,7 +177,7 @@ export default function AddSubscriptionForm({ onSubmit, onCancel, initialData }:
             id="price"
             name="price"
             type="number"
-            step="0.01"
+            step="0.1"
             min="0"
             value={formData.price}
             onChange={handleChange}
