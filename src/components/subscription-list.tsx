@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { formatCurrency, formatDate, getDaysUntil } from "@/lib/utils"
-import { ThemeAwareDropdownMenuContent, ThemeAwareDropdownMenuItem, ThemeAwareSelectContent, ThemeAwareSelectItem } from "@/components/ui/custom-theme-components"
+import { ThemeAwareDropdownMenuContent, ThemeAwareDropdownMenuItem, ThemeAwareSelectContent, ThemeAwareSelectItem, ThemeAwareBadge } from "@/components/ui/custom-theme-components"
 import type { Subscription } from "@/types/subscription"
 import { Edit, ExternalLink, MoreVertical, Pause, Play, Trash2, X } from "lucide-react"
 import { useState, useMemo } from "react"
@@ -175,8 +175,7 @@ export default function SubscriptionList({ subscriptions, onEdit, onDelete, onSt
                         )}
                       </p>
                       <div className="flex items-center gap-2 text-sm">
-                        <Badge variant="secondary">Started: {formatDate(subscription.startDate)}</Badge>
-                        <Badge className={badgeClass}>
+                      <ThemeAwareBadge>Started: {formatDate(subscription.startDate)}</ThemeAwareBadge>                        <Badge className={badgeClass}>
                           {isPaid
                             ? "Paid"
                             : subscription.status === "active"
