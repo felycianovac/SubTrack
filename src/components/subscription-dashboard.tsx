@@ -40,6 +40,7 @@ export default function SubscriptionDashboard() {
     }
   }, [])
   
+  
   const addSubscription = (subscription: Omit<Subscription, "id">) => {
     const newSub: Subscription = {
       ...subscription,
@@ -124,16 +125,18 @@ export default function SubscriptionDashboard() {
               />
               {sampleDataActive && (
           <div className="flex justify-end mt-2">
+            {sampleDataActive && (
           <Button
           variant="outline"
           className="text-red-500 hover:text-red-700 text-xs"
           onClick={() => {
             const filtered = subscriptions.filter(sub => !sub.sample)
             setSubscriptions(filtered)
-            localStorage.removeItem("subscriptions")
+            // localStorage.removeItem("subscriptions")
+            localStorage.setItem("subscriptions", JSON.stringify(filtered))
             localStorage.removeItem("sampleDataActive")
             setSampleDataActive(false)}}> Remove Sample Data
-          </Button>
+          </Button>)}
   </div>
 )}
 
