@@ -35,14 +35,40 @@
 // export default App
 
 // src/App.tsx
-import Home from "@/pages/Home";
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from '@/contexts/auth-context';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ThemeProvider } from '@/components/theme-provider';
+import { ProtectedRoute } from '@/components/protected-route';
+import Home from '@/pages/Home';
+import AuthPage from '@/pages/auth';
 import '@/styles/globals.css'
-import { ThemeProvider } from "@/components/theme-provider"; // <- your wrapper
 
-export default function App() {
+const queryClient = new QueryClient()
+
+function App() {
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <Home />
-    </ThemeProvider>
-  );
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <AuthProvider>
+          <Router>
+            <Routes>
+              <Route path="/auth" element={<AuthPage />} />
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute>
+                    <Home />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </Router>
+        </AuthProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
+  )
 }
+
+export default App
