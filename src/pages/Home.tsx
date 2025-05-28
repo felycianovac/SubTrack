@@ -3,11 +3,8 @@
 import { useAuth } from "@/contexts/auth-context"
 import SubscriptionDashboard from "@/components/subscription-dashboard"
 import { Logo } from "@/components/ui/logo"
-import { Button } from "@/components/ui/button"
-import { LogOut } from "lucide-react"
 
 export default function Home() {
-  const { user, logout } = useAuth()
 
   return (
     <div className="min-h-screen w-full">
@@ -15,17 +12,6 @@ export default function Home() {
         <div className="flex justify-between items-center mb-6">
           <Logo showTagline={true} />
           <div className="flex items-center gap-4">
-            <span className="text-sm text-muted-foreground">
-              {user?.email}
-            </span>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => logout()}
-              title="Logout"
-            >
-              <LogOut className="h-4 w-4" />
-            </Button>
           </div>
         </div>
         <SubscriptionDashboard />

@@ -13,6 +13,7 @@ import { TabsContent, TabsList, TabsTrigger, Tabs } from "@/components/ui/tabs"
 import SubscriptionStats from "./subscription-stats"
 import SubscriptionCalendar from "./subscription-calendar"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { UserAccountMenu } from "./user-account-menu"
 
 
 export default function SubscriptionDashboard() {
@@ -92,7 +93,10 @@ export default function SubscriptionDashboard() {
               >Calendar</TabsTrigger>
             </TabsList>
             <div className="absolute top-4 right-4 z-50">
-             <ThemeToggle />
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              <UserAccountMenu />
+            </div>
             </div>
             <div className="flex gap-2">
               {!sampleDataActive && (
