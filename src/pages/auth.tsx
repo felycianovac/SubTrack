@@ -11,17 +11,62 @@ import { Receipt } from "lucide-react"
 import { ThemeAwareAddButton } from "@/components/ui/custom-theme-components"
 import { useNavigate } from "react-router-dom"
 
+interface ValidationErrors {
+  email?: string;
+  password?: string;
+}
+
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
+  const [validationErrors, setValidationErrors] = useState<ValidationErrors>({})
   const { login, register } = useAuth()
   const navigate = useNavigate()
+
+  const validateEmail = (email: string): string | undefined => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!email) return "Email is required"
+    if (!emailRegex.test(email)) return "Please enter a valid email address"
+    return undefined
+  }
+
+  const validatePassword = (password: string): string | undefined => {
+    if (!password) return "Password is required"
+    
+    // Only apply strict validation during registration
+    if (!isLogin) {
+      if (password.length < 8) return "Password must be at least 8 characters long"
+      if (!/[A-Z]/.test(password)) return "Password must contain at least one uppercase letter"
+      if (!/[a-z]/.test(password)) return "Password must contain at least one lowercase letter"
+      if (!/[0-9]/.test(password)) return "Password must contain at least one number"
+      if (!/[!@#$%^&*]/.test(password)) return "Password must contain at least one special character (!@#$%^&*)"
+    }
+    
+    return undefined
+  }
+
+  const validateForm = (): boolean => {
+    const emailError = validateEmail(email)
+    const passwordError = validatePassword(password)
+    
+    setValidationErrors({
+      email: emailError,
+      password: passwordError
+    })
+
+    return !emailError && !passwordError
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
+    setValidationErrors({})
+
+    if (!validateForm()) {
+      return
+    }
 
     try {
       if (isLogin) {
@@ -70,10 +115,16 @@ export default function AuthPage() {
                     autoComplete="email"
                     required
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="mt-1.5"
+                    onChange={(e) => {
+                      setEmail(e.target.value)
+                      setValidationErrors(prev => ({ ...prev, email: undefined }))
+                    }}
+                    className={`mt-1.5 ${validationErrors.email ? 'border-red-500' : ''}`}
                     placeholder="Enter your email"
                   />
+                  {validationErrors.email && (
+                    <p className="mt-1 text-sm text-red-500">{validationErrors.email}</p>
+                  )}
                 </div>
 
                 <div>
@@ -85,10 +136,16 @@ export default function AuthPage() {
                     autoComplete={isLogin ? "current-password" : "new-password"}
                     required
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="mt-1.5"
+                    onChange={(e) => {
+                      setPassword(e.target.value)
+                      setValidationErrors(prev => ({ ...prev, password: undefined }))
+                    }}
+                    className={`mt-1.5 ${validationErrors.password ? 'border-red-500' : ''}`}
                     placeholder="Enter your password"
                   />
+                  {validationErrors.password && (
+                    <p className="mt-1 text-sm text-red-500">{validationErrors.password}</p>
+                  )}
                 </div>
               </div>
 
@@ -108,7 +165,11 @@ export default function AuthPage() {
                 <button
                   type="button"
                   className="text-sm text-primary hover:text-primary/80 transition-colors"
-                  onClick={() => setIsLogin(!isLogin)}
+                  onClick={() => {
+                    setIsLogin(!isLogin)
+                    setValidationErrors({})
+                    setError("")
+                  }}
                 >
                   {isLogin
                     ? "Don't have an account? Sign up"
