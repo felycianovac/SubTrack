@@ -1,5 +1,6 @@
 import axios from 'axios';
 import type { AuthRequest, AuthResponse, SwitchContextRequest, UserDTO } from '@/types/auth';
+import { GuestDTO, ContextDTO, PermissionRequest } from '@/types/permissions';
 
 const api = axios.create({
   baseURL: 'http://localhost:8080/api',
@@ -37,4 +38,31 @@ export const authApi = {
     const response = await api.post<AuthResponse>('/auth/revert-context');
     return response.data;
   },
+}; 
+
+export const permissionsApi = {
+  addPermission: async (request: PermissionRequest) => {
+    const response = await api.post('/permissions/add', request);
+    return response.data;
+  },
+
+  updatePermission: async (request: PermissionRequest) => {
+    const response = await api.put('/permissions/update', request);
+    return response.data;
+  },
+
+  deletePermission: async (guestEmail: string) => {
+    const response = await api.delete('/permissions/delete', { data: guestEmail });
+    return response.data;
+  },
+
+  getContexts: async () => {
+    const response = await api.get<ContextDTO[]>('/permissions/contexts');
+    return response.data;
+  },
+
+  getGuests: async () => {
+    const response = await api.get<GuestDTO[]>('/permissions/guests');
+    return response.data;
+  }
 }; 

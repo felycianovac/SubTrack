@@ -51,17 +51,26 @@ export function ThemeAwareAddButton({ onClick, children }: ThemeAwareAddButtonPr
   );
 }
 
-export function ThemeAwareDropdownMenuContent({ children }: { children: ReactNode }) {
+export function ThemeAwareDropdownMenuContent({ 
+  children, 
+  className,
+  align,
+  ...props 
+}: { 
+  children: ReactNode;
+  className?: string;
+  align?: 'start' | 'center' | 'end';
+} & React.ComponentPropsWithoutRef<typeof DropdownMenuContent>) {
   const contentClass = useMountedThemeClass(
     "bg-black text-white shadow-lg",
     "bg-white text-black shadow-lg"
   );
 
   if (!contentClass) {
-    return <DropdownMenuContent>{children}</DropdownMenuContent>;
+    return <DropdownMenuContent className={className} align={align} {...props}>{children}</DropdownMenuContent>;
   }
 
-  return <DropdownMenuContent className={contentClass}>{children}</DropdownMenuContent>;
+  return <DropdownMenuContent className={cn(contentClass, className)} align={align} {...props}>{children}</DropdownMenuContent>;
 }
 
 export function ThemeAwareDropdownMenuItem({ 
