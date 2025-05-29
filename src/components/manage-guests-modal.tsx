@@ -18,11 +18,16 @@ export function ManageGuestsModal({ isOpen, onClose }: ManageGuestsModalProps) {
   const [guestEmail, setGuestEmail] = useState('');
   const [permission, setPermission] = useState<'GUEST_RW' | 'GUEST_RO'>('GUEST_RO');
   const queryClient = useQueryClient();
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [generalError, setGeneralError] = useState<string | null>(null);
+
 
   const { data: guests, isLoading } = useQuery({
     queryKey: ['guests'],
     queryFn: permissionsApi.getGuests,
   });
+  const isExistingGuest = guests?.some((g) => g.guestEmail === guestEmail);
+
 
   const addPermissionMutation = useMutation({
     mutationFn: permissionsApi.addPermission,
@@ -40,21 +45,57 @@ export function ManageGuestsModal({ isOpen, onClose }: ManageGuestsModalProps) {
     },
   });
 
+  const updatePermissionMutation = useMutation({
+    mutationFn: permissionsApi.updatePermission,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['guests'] });
+    },
+  });
+
   if (!isOpen) return null;
 
-  const handleAddGuest = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!guestEmail) return;
+const handleAddGuest = async (e: React.FormEvent) => {
+  e.preventDefault();
+    setEmailError(null);
+  setGeneralError(null);
 
-    try {
+  if (!guestEmail){
+    setEmailError('Email is required.') 
+    return;
+  }
+
+  const existingGuest = guests?.find((g) => g.guestEmail === guestEmail);
+
+  try {
+    if (existingGuest) {
+      await updatePermissionMutation.mutateAsync({
+        guestEmail,
+        permission,
+      });
+    } else {
       await addPermissionMutation.mutateAsync({
         guestEmail,
         permission,
       });
-    } catch (error) {
-      console.error('Failed to add guest:', error);
     }
-  };
+
+    setGuestEmail('');
+    setPermission('GUEST_RO');
+    setEmailError(null);
+    setGeneralError(null);
+  } catch (error: any) {
+  const raw = error.response?.data;
+  const message = typeof raw === 'string' ? raw : raw?.message || 'An unexpected error occurred.';
+
+ if ((message as string).toLowerCase().includes('yourself')) {
+   console.log()
+    setEmailError(message); // show under email field
+  } else if((message as string).toLowerCase().includes('user not found')) {
+    setGeneralError(message); // show below the form
+  }
+  }
+};
+
 
   const handleRemoveGuest = async (guestEmail: string) => {
     try {
@@ -62,6 +103,7 @@ export function ManageGuestsModal({ isOpen, onClose }: ManageGuestsModalProps) {
     } catch (error) {
       console.error('Failed to remove guest:', error);
     }
+    
   };
 
   return (
@@ -85,6 +127,7 @@ export function ManageGuestsModal({ isOpen, onClose }: ManageGuestsModalProps) {
               placeholder="Enter guest email"
               required
             />
+{emailError && <div className="text-red-500 text-sm">{emailError}</div>}
           </div>
 
           <div className="space-y-2">
@@ -101,8 +144,11 @@ export function ManageGuestsModal({ isOpen, onClose }: ManageGuestsModalProps) {
           </div>
 
           <ThemeAwareAddButton onClick={handleAddGuest}>
-            Add Guest
+            {isExistingGuest ? 'Modify Permission' : 'Add Guest'}
           </ThemeAwareAddButton>
+          {generalError && <div className="text-red-500 text-sm mt-2">{generalError}</div>}
+
+
         </form>
 
         <div className="space-y-4">
