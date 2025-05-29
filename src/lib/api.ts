@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { AuthRequest, AuthResponse, SwitchContextRequest, UserDTO } from '@/types/auth';
+import type { AuthRequest, AuthResponse, ContextSwitchDTO, SwitchContextRequest, UserDTO } from '@/types/auth';
 import { GuestDTO, ContextDTO, PermissionRequest } from '@/types/permissions';
 import { SubscriptionDTO } from '@/types/subscriptions';
 
@@ -30,8 +30,8 @@ export const authApi = {
   },
   
 
-  switchContext: async (data: SwitchContextRequest): Promise<AuthResponse> => {
-    const response = await api.post<AuthResponse>('/auth/switch-context', data);
+  switchContext: async (data: SwitchContextRequest): Promise<ContextSwitchDTO> => {
+    const response = await api.post<ContextSwitchDTO>('/auth/switch-context', data);
     return response.data;
   },
 

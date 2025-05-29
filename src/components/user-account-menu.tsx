@@ -45,7 +45,7 @@ export function UserAccountMenu() {
             Manage Guests
           </ThemeAwareDropdownMenuItem>
           <ThemeAwareDropdownMenuItem onClick={() => setIsGuestProfilesOpen(true)}>
-            Guest Profiles
+            Visit Hosts
           </ThemeAwareDropdownMenuItem>
           <DropdownMenuSeparator />
           <ThemeAwareDropdownMenuItem onClick={handleLogout}>

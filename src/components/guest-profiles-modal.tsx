@@ -4,17 +4,22 @@ import { X } from 'lucide-react';
 import { ContextDTO } from '@/types/permissions';
 import { permissionsApi } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
+import { useAuth } from '@/contexts/auth-context';
 
 interface GuestProfilesModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
+import { useNavigate } from 'react-router-dom';
+
 export function GuestProfilesModal({ isOpen, onClose }: GuestProfilesModalProps) {
+  const navigate = useNavigate();
   const { data: contexts, isLoading } = useQuery({
     queryKey: ['contexts'],
     queryFn: permissionsApi.getContexts,
   });
+  const { switchContext, contextUserId } = useAuth();
 
   if (!isOpen) return null;
 
@@ -22,7 +27,7 @@ export function GuestProfilesModal({ isOpen, onClose }: GuestProfilesModalProps)
     <ThemeAwareModal>
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h2 className="text-xl font-semibold">Guest Profiles</h2>
+          <h2 className="text-xl font-semibold">Host Profiles</h2>
           <Button variant="ghost" size="icon" onClick={onClose}>
             <X className="h-4 w-4" />
           </Button>
@@ -32,7 +37,7 @@ export function GuestProfilesModal({ isOpen, onClose }: GuestProfilesModalProps)
           {isLoading ? (
             <div>Loading...</div>
           ) : contexts?.length === 0 ? (
-            <div className="text-sm text-muted-foreground">No guest profiles available</div>
+            <div className="text-sm text-muted-foreground">No guest host available</div>
           ) : (
             <div className="space-y-2">
               {contexts?.map((context: ContextDTO) => (
@@ -49,12 +54,14 @@ export function GuestProfilesModal({ isOpen, onClose }: GuestProfilesModalProps)
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => {
-                      // TODO: Implement profile switching
-                      console.log('Switch to profile:', context.ownerEmail);
+                    disabled={contextUserId === context.ownerId}
+                    onClick={async () => {
+                      await switchContext({ ownerId: context.ownerId });
+                      navigate('/guest');
+                      onClose();
                     }}
                   >
-                    Switch Profile
+                    {contextUserId === context.ownerId ? 'Active' : 'Switch Profile'}
                   </Button>
                 </div>
               ))}
@@ -64,4 +71,4 @@ export function GuestProfilesModal({ isOpen, onClose }: GuestProfilesModalProps)
       </div>
     </ThemeAwareModal>
   );
-} 
+}

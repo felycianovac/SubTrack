@@ -17,3 +17,8 @@ export interface AuthResponse {
 export interface SwitchContextRequest {
   ownerId: number;
 } 
+
+export interface ContextSwitchDTO{
+  authResponse: AuthResponse;
+  contextUserId: number;
+}

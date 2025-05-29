@@ -91,18 +91,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const switchContext = async (data: SwitchContextRequest ) => {
-    try {
-      const response = await authApi.switchContext({ ownerId: data.ownerId });
-      if (response.user) {
-        setUser(response.user);
-        setContextUserId(response.user.id);
-      }
-    } catch (error) {
-      console.error('Switch context error:', error);
-      throw error;
+const switchContext = async (data: SwitchContextRequest) => {
+  try {
+    const response = await authApi.switchContext({ ownerId: data.ownerId });
+
+    // response: ContextDTO { authResponse: { message, user }, contextUserId }
+
+    const user = response.authResponse.user;
+    const contextUserId = response.contextUserId;
+
+    if (user && contextUserId !== undefined) {
+      setUser(user);
+      console.log("contextUserId", contextUserId)
+      setContextUserId(contextUserId);
+    } else {
+      console.error('Unexpected response from switchContext:', response);
     }
-  };
+  } catch (error) {
+    console.error('Switch context error:', error);
+    throw error;
+  }
+};
+
   
   const revertContext = async () => {
     try {
