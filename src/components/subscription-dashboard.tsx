@@ -22,7 +22,9 @@ export default function SubscriptionDashboard() {
   const [isAddingNew, setIsAddingNew] = useState(false)
   const [editingSubscription, setEditingSubscription] = useState<Subscription | null>(null)
   const [sampleDataActive, setSampleDataActive] = useState(false)
-  const { contextUserId } = useAuth()
+  const { user, contextUserId } = useAuth()
+  const isReadOnlyGuest = user?.role === 'GUEST_RO';
+
 
   useEffect(() => {
     const sampleFlag = localStorage.getItem("sampleDataActive") === "true";
@@ -124,7 +126,7 @@ export default function SubscriptionDashboard() {
             </div>
           </div>
           <div className="flex gap-2">
-            {!sampleDataActive && (
+            {(!sampleDataActive && !isReadOnlyGuest) && (
               <Button
                 variant="outline"
                 onClick={() => {
@@ -138,7 +140,7 @@ export default function SubscriptionDashboard() {
                 Try Sample Data
               </Button>
             )}
-
+          {!isReadOnlyGuest && (
             <ThemeAwareAddButton
               onClick={() => {
                 setIsAddingNew(true)
@@ -146,6 +148,7 @@ export default function SubscriptionDashboard() {
               }}>
               Add Subscription
             </ThemeAwareAddButton>
+            )}
           </div>
         </div>
 

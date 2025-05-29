@@ -14,9 +14,11 @@ import { ManageGuestsModal } from "./manage-guests-modal"
 import { GuestProfilesModal } from "./guest-profiles-modal"
 
 export function UserAccountMenu() {
-  const { user, logout } = useAuth()
+  const { user, logout, contextUserId, revertContext } = useAuth()
   const [isManageGuestsOpen, setIsManageGuestsOpen] = useState(false)
   const [isGuestProfilesOpen, setIsGuestProfilesOpen] = useState(false)
+
+  const isGuest = user?.id !== contextUserId;
 
   const handleLogout = async () => {
     try {
@@ -41,6 +43,11 @@ export function UserAccountMenu() {
             {user?.email}
           </div>
           <DropdownMenuSeparator />
+                    {isGuest && ( 
+            <ThemeAwareDropdownMenuItem onClick={revertContext}>
+              Return to My Profile
+            </ThemeAwareDropdownMenuItem>
+          )}
           <ThemeAwareDropdownMenuItem onClick={() => setIsManageGuestsOpen(true)}>
             Manage Guests
           </ThemeAwareDropdownMenuItem>

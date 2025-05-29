@@ -7,6 +7,7 @@ import { Edit, ExternalLink, MoreVertical, Pause, Play, Trash2, X } from "lucide
 import { useState, useMemo } from "react"
 import { Select, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { DropdownMenu, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { useAuth } from "@/contexts/auth-context"
 
 
 
@@ -27,6 +28,8 @@ export default function SubscriptionList({ subscriptions, onEdit, onDelete, onSt
     return ["all", ...Array.from(uniqueCategories)]
   }, [subscriptions])
 
+  const {user} = useAuth()
+  const isReadOnlyGuest = user?.role === 'GUEST_RO';
   const formatBillingCycle = (billingCycle: Subscription["billingCycle"]): string => {
     if (billingCycle.interval === 1) {
       return billingCycle.unit.slice(0, -1) + "ly" 
@@ -193,6 +196,7 @@ export default function SubscriptionList({ subscriptions, onEdit, onDelete, onSt
                         <MoreVertical className="h-4 w-4" />
                         <span className="sr-only">Open menu</span>
                       </DropdownMenuTrigger>
+                        {!isReadOnlyGuest && (
                       <ThemeAwareDropdownMenuContent>
                         <ThemeAwareDropdownMenuItem onClick={() => onEdit(subscription)}>
                           <Edit className="mr-2 h-4 w-4" />
@@ -224,6 +228,7 @@ export default function SubscriptionList({ subscriptions, onEdit, onDelete, onSt
                           Delete
                         </ThemeAwareDropdownMenuItem>
                         </ThemeAwareDropdownMenuContent>
+                        )}
                       </DropdownMenu>
                   </div>
                 </CardContent>
