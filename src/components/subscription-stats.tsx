@@ -160,8 +160,8 @@ export default function SubscriptionStats({ subscriptions }: SubscriptionStatsPr
               <span className="font-medium">{subscriptions.filter((sub) => sub.status === "paused").length}</span>
             </div>
             <div className="flex justify-between">
-              <span>Cancelled Subscriptions</span>
-              <span className="font-medium">{subscriptions.filter((sub) => sub.status === "cancelled").length}</span>
+              <span>canceled Subscriptions</span>
+              <span className="font-medium">{subscriptions.filter((sub) => sub.status === "canceled").length}</span>
             </div>
             <div className="flex justify-between">
               <span>Disabled Subscriptions</span>

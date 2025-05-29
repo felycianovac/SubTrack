@@ -116,7 +116,7 @@ export function generateSampleData(): Subscription[] {
       paidBy: "Partner",
       category: "Entertainment",
       url: "https://disneyplus.com",
-      status: "cancelled",
+      status: "canceled",
       sample: true,
     },
     {

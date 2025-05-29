@@ -4,7 +4,7 @@ export interface AuthRequest {
 }
 
 export interface UserDTO {
-  userId: number;
+  id: number;
   email: string;
   role: string;
 }

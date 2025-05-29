@@ -16,6 +16,7 @@ interface ValidationErrors {
   password?: string;
 }
 
+
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true)
   const [email, setEmail] = useState("")
@@ -71,6 +72,7 @@ export default function AuthPage() {
     try {
       if (isLogin) {
         await login(email, password)
+        
         navigate("/")
       } else {
         await register(email, password)

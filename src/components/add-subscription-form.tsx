@@ -51,7 +51,7 @@ const PAYMENT_METHODS: PaymentMethod[] = [
 
 const TIME_UNITS: TimeUnit[] = ["days", "weeks", "months", "years"]
 
-const STATUSES: SubscriptionStatus[] = ["active", "paused", "cancelled", "disabled"]
+const STATUSES: SubscriptionStatus[] = ["active", "paused", "canceled", "disabled"]
 
 export default function AddSubscriptionForm({ onSubmit, initialData }: AddSubscriptionFormProps) {
   const [formData, setFormData] = useState<Omit<Subscription, "id">>({

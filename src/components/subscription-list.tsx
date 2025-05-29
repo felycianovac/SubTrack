@@ -89,7 +89,7 @@ export default function SubscriptionList({ subscriptions, onEdit, onDelete, onSt
   }, [subscriptions, categoryFilter, sortBy])
 
   const getStatusColor = (status: Subscription["status"], daysUntil: number) => {
-    if (status === "cancelled") return "bg-gray-200 text-gray-700"
+    if (status === "canceled") return "bg-gray-200 text-gray-700"
     if (status === "paused") return "bg-yellow-100 text-yellow-800"
     if (status === "disabled") return "bg-red-100 text-red-800"
     if (daysUntil <= 7) return "bg-red-100 text-red-800"
@@ -146,7 +146,7 @@ export default function SubscriptionList({ subscriptions, onEdit, onDelete, onSt
             return (
               <Card
                 key={subscription.id}
-                className={`${subscription.status === "cancelled" || subscription.status === "disabled" ? "opacity-60" : ""} ${
+                className={`${subscription.status === "canceled" || subscription.status === "disabled" ? "opacity-60" : ""} ${
                   subscription.status === "paused" ? "border-yellow-300" : ""
                 }`}
               >
@@ -204,14 +204,14 @@ export default function SubscriptionList({ subscriptions, onEdit, onDelete, onSt
                           Pause
                         </ThemeAwareDropdownMenuItem>
                         )}
-                         {(subscription.status === "paused" || subscription.status === "cancelled") && (
+                         {(subscription.status === "paused" || subscription.status === "canceled") && (
                           <ThemeAwareDropdownMenuItem onClick={() => onStatusChange(subscription.id, "active")}>
                           <Play className="mr-2 h-4 w-4" />
                           Activate
                         </ThemeAwareDropdownMenuItem>
                         )}
-                        {subscription.status !== "cancelled" && (
-                          <ThemeAwareDropdownMenuItem onClick={() => onStatusChange(subscription.id, "cancelled")}>
+                        {subscription.status !== "canceled" && (
+                          <ThemeAwareDropdownMenuItem onClick={() => onStatusChange(subscription.id, "canceled")}>
                           <X className="mr-2 h-4 w-4" />
                           Cancel
                         </ThemeAwareDropdownMenuItem>

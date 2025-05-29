@@ -1,6 +1,7 @@
 import axios from 'axios';
 import type { AuthRequest, AuthResponse, SwitchContextRequest, UserDTO } from '@/types/auth';
 import { GuestDTO, ContextDTO, PermissionRequest } from '@/types/permissions';
+import { SubscriptionDTO } from '@/types/subscriptions';
 
 const api = axios.create({
   baseURL: 'http://localhost:8080/api',
@@ -40,6 +41,7 @@ export const authApi = {
   },
 }; 
 
+
 export const permissionsApi = {
   addPermission: async (request: PermissionRequest) => {
     const response = await api.post('/permissions/add', request);
@@ -66,3 +68,32 @@ export const permissionsApi = {
     return response.data;
   }
 }; 
+
+export const subscriptionsApi = {
+  getAll: async (contextUserId: number): Promise<SubscriptionDTO[]> => {
+    const response = await api.get('/subscriptions', {
+      params: { contextUserId },
+    });
+    return response.data;
+  },
+
+  create: async (subscription: SubscriptionDTO, contextUserId: number): Promise<SubscriptionDTO> => {
+    const response = await api.post('/subscriptions', subscription, {
+      params: { contextUserId },
+    });
+    return response.data;
+  },
+
+  update: async (id: number, subscription: SubscriptionDTO, contextUserId: number): Promise<SubscriptionDTO> => {
+    const response = await api.put('/subscriptions', subscription, {
+      params: { id, contextUserId },
+    });
+    return response.data;
+  },
+
+  delete: async (id: number, contextUserId: number): Promise<void> => {
+    await api.delete(`/subscriptions/${id}`, {
+      params: { contextUserId },
+    });
+  },
+};

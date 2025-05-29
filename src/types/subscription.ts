@@ -3,7 +3,7 @@ export interface BillingCycle {
     interval: number;   
     unit: TimeUnit;     
   }
-export type SubscriptionStatus = "active" | "paused" | "cancelled" | "disabled";
+export type SubscriptionStatus = "active" | "paused" | "canceled" | "disabled";
 export type Currency = "USD" | "EUR" | "GBP" | "MDL" | "JPY" | "AUD" | "CAD";
 export type PaymentMethod = "credit_card" | "debit_card" | "paypal" | "bank_transfer" | "apple_pay" | "google_pay" | "other";
 
