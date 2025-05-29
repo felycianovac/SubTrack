@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { addDays, addWeeks, addMonths, addYears } from "date-fns";
+
 import type {
   Subscription,
   Currency,
@@ -52,6 +54,9 @@ const PAYMENT_METHODS: PaymentMethod[] = [
 const TIME_UNITS: TimeUnit[] = ["days", "weeks", "months", "years"]
 
 const STATUSES: SubscriptionStatus[] = ["active", "paused", "canceled", "disabled"]
+
+
+
 
 export default function AddSubscriptionForm({ onSubmit, initialData }: AddSubscriptionFormProps) {
   const [formData, setFormData] = useState<Omit<Subscription, "id">>({
@@ -154,6 +159,34 @@ export default function AddSubscriptionForm({ onSubmit, initialData }: AddSubscr
       onSubmit(processedData)
     }
   }
+
+  useEffect(() => {
+  let newDate = new Date(formData.startDate);
+  const { interval, unit } = formData.billingCycle;
+
+  switch (unit) {
+    case "days":
+      newDate = addDays(newDate, interval);
+      break;
+    case "weeks":
+      newDate = addWeeks(newDate, interval);
+      break;
+    case "months":
+      newDate = addMonths(newDate, interval);
+      break;
+    case "years":
+      newDate = addYears(newDate, interval);
+      break;
+    default:
+      break;
+  }
+
+  setFormData((prev) => ({
+    ...prev,
+    nextPaymentDate: newDate,
+  }));
+}, [formData.startDate, formData.billingCycle.interval, formData.billingCycle.unit]);
+
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">

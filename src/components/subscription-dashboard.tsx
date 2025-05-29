@@ -24,6 +24,7 @@ export default function SubscriptionDashboard() {
   const [sampleDataActive, setSampleDataActive] = useState(false)
   const { user, contextUserId } = useAuth()
   const isReadOnlyGuest = user?.role === 'GUEST_RO';
+  
 
 
   useEffect(() => {
@@ -126,7 +127,7 @@ export default function SubscriptionDashboard() {
             </div>
           </div>
           <div className="flex gap-2">
-            {(!sampleDataActive && !isReadOnlyGuest) && (
+            {/* {(!sampleDataActive && !isReadOnlyGuest) && (
               <Button
                 variant="outline"
                 onClick={() => {
@@ -139,7 +140,7 @@ export default function SubscriptionDashboard() {
                 }}>
                 Try Sample Data
               </Button>
-            )}
+            )} */}
           {!isReadOnlyGuest && (
             <ThemeAwareAddButton
               onClick={() => {

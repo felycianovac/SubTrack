@@ -56,7 +56,7 @@ export function ManageGuestsModal({ isOpen, onClose }: ManageGuestsModalProps) {
 
 const handleAddGuest = async (e: React.FormEvent) => {
   e.preventDefault();
-    setEmailError(null);
+  setEmailError(null);
   setGeneralError(null);
 
   if (!guestEmail){
@@ -123,7 +123,12 @@ const handleAddGuest = async (e: React.FormEvent) => {
               id="guestEmail"
               type="email"
               value={guestEmail}
-              onChange={(e) => setGuestEmail(e.target.value)}
+              onChange={(e) => {
+                setGuestEmail(e.target.value)
+                setEmailError(null)     
+                setGeneralError(null)   
+              }   
+              }
               placeholder="Enter guest email"
               required
             />
