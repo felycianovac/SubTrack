@@ -380,6 +380,7 @@ export default function AddSubscriptionForm({ onSubmit, initialData }: AddSubscr
       <div className="grid gap-2">
         <Label htmlFor="status">Status</Label>
         <Select
+          key={`status-${formData.status}`} // Force re-render when status changes
           value={formData.status}
           onValueChange={(value) => handleSelectChange("status", value as SubscriptionStatus)}
         >

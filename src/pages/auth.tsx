@@ -36,7 +36,6 @@ export default function AuthPage() {
   const validatePassword = (password: string): string | undefined => {
     if (!password) return "Password is required"
     
-    // Only apply strict validation during registration
     if (!isLogin) {
       if (password.length < 8) return "Password must be at least 8 characters long"
       if (!/[A-Z]/.test(password)) return "Password must contain at least one uppercase letter"
@@ -73,13 +72,14 @@ export default function AuthPage() {
       if (isLogin) {
         await login(email, password)
         
+        
         navigate("/")
       } else {
         await register(email, password)
         navigate("/")
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred")
+      setError("Invalid credentials")
     }
   }
 
@@ -152,7 +152,7 @@ export default function AuthPage() {
               </div>
 
               {error && (
-                <div className="p-3 rounded-md bg-destructive/10 text-destructive text-sm text-center">
+                <div className="p-3 rounded-md bg-destructive/10 text-destructive  text-red-500 text-sm text-center">
                   {error}
                 </div>
               )}
