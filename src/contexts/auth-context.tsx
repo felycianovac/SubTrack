@@ -19,10 +19,19 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserDTO | null>(null);
-  const [contextUserId, setContextUserId] = useState<number | null>(null);
-
+  const [contextUserId, setContextUserId] = useState(() => {
+  const storeId = localStorage.getItem('contextUserId');
+  return storeId ? Number(storeId) : null;})
   const [isLoading, setIsLoading] = useState(true);
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (contextUserId !== null) {
+      localStorage.setItem('contextUserId', contextUserId.toString());
+    } else {
+      localStorage.removeItem('contextUserId');
+    }
+  }, [contextUserId]);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -31,12 +40,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         
         if (response) {
           setUser(response);
-          setContextUserId(response.id)
+          setContextUserId((prevId) => prevId ?? response.id);
         } else {
           setUser(null);
+          setContextUserId(null);
         }
       } catch (error) {
         setUser(null);
+        setContextUserId(null);
       } finally {
         setIsLoading(false);
       }
@@ -52,7 +63,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (response.user) {
         setUser(response.user);
         setContextUserId(response.user.id)
-        console.log("contextUserId", response.user.id)
 
       } else {
         throw new Error('Login failed: No user data received');
