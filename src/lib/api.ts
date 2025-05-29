@@ -70,12 +70,21 @@ export const permissionsApi = {
 }; 
 
 export const subscriptionsApi = {
-  getAll: async (contextUserId: number): Promise<SubscriptionDTO[]> => {
-    const response = await api.get('/subscriptions', {
-      params: { contextUserId },
-    });
-    return response.data;
-  },
+  getAll: async (
+  contextUserId: number,
+  page: number,
+  size: number
+): Promise<{ content: SubscriptionDTO[]; totalPages: number; totalElements: number; }> => {
+  const response = await api.get('/subscriptions', {
+    params: {
+      contextUserId,
+      page,
+      size,
+    },
+  });
+  return response.data;
+},
+
 
   create: async (subscription: SubscriptionDTO, contextUserId: number): Promise<SubscriptionDTO> => {
     const response = await api.post('/subscriptions', subscription, {

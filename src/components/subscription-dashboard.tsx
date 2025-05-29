@@ -24,8 +24,16 @@ export default function SubscriptionDashboard() {
   const [sampleDataActive, setSampleDataActive] = useState(false)
   const { user, contextUserId } = useAuth()
   const isReadOnlyGuest = user?.role === 'GUEST_RO';
+  const [page, setPage] = useState(0)
+  const [totalPages, setTotalPages] = useState(1)
+  const [size] = useState(10)
   
-
+const fetchSubscriptions = async () => {
+    if (!contextUserId) return
+    const result = await subscriptionsApi.getAll(contextUserId, page, size)
+    setSubscriptions(result.content.map(mapSubscriptionDTOToSubscription))
+    setTotalPages(result.totalPages)
+  }
 
   useEffect(() => {
     const sampleFlag = localStorage.getItem("sampleDataActive") === "true";
@@ -35,12 +43,9 @@ export default function SubscriptionDashboard() {
       setSubscriptions(sample);
       setSampleDataActive(true);
     } else if (contextUserId) {
-      subscriptionsApi.getAll(contextUserId).then((dtos) => {
-        const subs = dtos.map((dto) => mapSubscriptionDTOToSubscription(dto));
-        setSubscriptions(subs);
-      });
+      fetchSubscriptions();
     }
-  }, [contextUserId]);
+  }, [contextUserId, page]);
 
   const addSubscription = async (sub: Omit<Subscription, "id">) => {
     if (sampleDataActive) {
@@ -53,7 +58,7 @@ export default function SubscriptionDashboard() {
 
     if (!contextUserId) return;
     const dto = await subscriptionsApi.create(mapSubscriptionToDTO(sub as Subscription, contextUserId), contextUserId);
-    setSubscriptions([...subscriptions, mapSubscriptionDTOToSubscription(dto)]);
+    await fetchSubscriptions();
   };
 
   const updateSubscription = async (sub: Subscription) => {
@@ -66,10 +71,7 @@ export default function SubscriptionDashboard() {
 
     if (!contextUserId) return;
     const dto = await subscriptionsApi.update(parseInt(sub.id), mapSubscriptionToDTO(sub, contextUserId), contextUserId);
-    const updated = subscriptions.map((s) =>
-      s.id === sub.id ? mapSubscriptionDTOToSubscription(dto) : s
-    );
-    setSubscriptions(updated);
+    await fetchSubscriptions();
   };
 
   const deleteSubscription = async (id: string) => {
@@ -82,7 +84,7 @@ export default function SubscriptionDashboard() {
 
     if (!contextUserId) return;
     await subscriptionsApi.delete(parseInt(id), contextUserId);
-    setSubscriptions(subscriptions.filter((s) => s.id !== id));
+    await fetchSubscriptions();
   };
 
   const handleStatusChange = (id: string, status: Subscription["status"]) => {
@@ -160,7 +162,7 @@ export default function SubscriptionDashboard() {
             onDelete={deleteSubscription}
             onStatusChange={handleStatusChange}
           />
-          {sampleDataActive && (
+          {/* {sampleDataActive && (
             <div className="flex justify-end mt-2">
               <Button
                 variant="outline"
@@ -175,7 +177,16 @@ export default function SubscriptionDashboard() {
                 Remove Sample Data
               </Button>
             </div>
-          )}
+          )} */}
+          <div className="flex justify-between items-center mt-4">
+            <Button onClick={() => setPage((p) => Math.max(p - 1, 0))} disabled={page === 0}>
+              Previous
+            </Button>
+            <span className="text-sm font-">Page {page + 1} of {totalPages}</span>
+            <Button onClick={() => setPage((p) => Math.min(p + 1, totalPages - 1))} disabled={page + 1 >= totalPages}>
+              Next
+            </Button>
+          </div>
         </TabsContent>
 
         <TabsContent value="stats">
