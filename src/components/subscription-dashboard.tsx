@@ -178,15 +178,33 @@ const fetchSubscriptions = async () => {
               </Button>
             </div>
           )} */}
-          <div className="flex justify-between items-center mt-4">
-            <Button onClick={() => setPage((p) => Math.max(p - 1, 0))} disabled={page === 0}>
-              Previous
-            </Button>
-            <span className="text-sm font-">Page {page + 1} of {totalPages}</span>
-            <Button onClick={() => setPage((p) => Math.min(p + 1, totalPages - 1))} disabled={page + 1 >= totalPages}>
-              Next
-            </Button>
-          </div>
+          <div className="flex justify-center items-center gap-4 mt-6">
+  <Button
+    variant="outline"
+    size="sm"
+    className="rounded-full px-4 w-28 justify-center"
+    onClick={() => setPage((p) => Math.max(p - 1, 0))}
+    disabled={page === 0}
+  >
+    ← Previous
+  </Button>
+
+  <div className="text-sm text-muted-foreground font-medium px-3 py-1 border rounded-full bg-muted/50">
+    Page <span className="font-semibold text-foreground">{page + 1}</span> of{" "}
+    <span className="font-semibold text-foreground">{totalPages}</span>
+  </div>
+
+  <Button
+    variant="outline"
+    size="sm"
+    className="rounded-full px-4 w-28 justify-center"
+    onClick={() => setPage((p) => Math.min(p + 1, totalPages - 1))}
+    disabled={page + 1 >= totalPages}
+  >
+    Next →
+  </Button>
+</div>
+
         </TabsContent>
 
         <TabsContent value="stats">
